@@ -1,0 +1,32 @@
+### https://smash.gg/tournament/shinto-series-smash-1/event/singles-1v1
+GRAPHQL https://api.start.gg/gql/alpha
+Authorization: Bearer {{startgg}}
+
+query TournamentEventQuery($tournament: String, $event: String) {
+    tournament(slug: $tournament) {
+        name
+        url(relative: false)
+    }
+    event(slug: $event) {
+        name
+        entrants(query: { page: 1, perPage: 500 }) {
+            nodes {
+                name
+                standing {
+                    placement
+                }
+            }
+        }
+        sets(page: 1, perPage: 3, sortType: RECENT) {
+            nodes {
+                fullRoundText
+                lPlacement
+            }
+        }
+    }
+}
+
+{
+    "tournament": "shinto-series-smash-1",
+    "event": "tournament/shinto-series-smash-1/event/singles-1v1"
+}

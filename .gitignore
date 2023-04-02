@@ -21,3 +21,5 @@
 go.work
 
 .envrc
+
+*.private.env.json
