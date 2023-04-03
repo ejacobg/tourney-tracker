@@ -1,3 +1,5 @@
+// Package startgg contains code for obtaining tournament information using the start.gg API (https://developer.start.gg/).
+// This package assumes that the tournaments are already complete.
 package startgg
 
 import (
@@ -120,7 +122,7 @@ func (r *response) entrants() (entrants []tournament.Entrant) {
 	for _, e := range r.Data.Event.Entrants.Nodes {
 		entrants = append(entrants, tournament.Entrant{Name: e.Name, Placement: e.Standing.Placement})
 	}
-	return entrants
+	return
 }
 
 // applyResetPoints returns true if the second-place finisher made a bracket reset.
@@ -180,12 +182,12 @@ func FromURL(URL *url.URL, key string) (tourney tournament.Tournament, entrants 
 // parseSlugs will extract the <tournament-slug> and <event-slug> values from the given start.gg event URL.
 func parseSlugs(URL *url.URL) (tournamentSlug, eventSlug string, err error) {
 	path := strings.Split(URL.Path, "/")
-	if len(path) < 4 {
+	if len(path) < 5 {
 		return "", "", errors.New("not enough path parameters")
 	}
 
-	// An ideal path would look like this: ["tournament", <tournament-slug>, "event", <event-slug>]
-	tournamentSlug, eventSlug = path[1], path[3]
+	// An ideal path would look like this: ["", "tournament", <tournament-slug>, "event", <event-slug>]
+	tournamentSlug, eventSlug = path[2], path[4]
 	return
 }
 
