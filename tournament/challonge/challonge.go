@@ -3,9 +3,7 @@
 package challonge
 
 import (
-	"encoding/json"
 	"errors"
-	"fmt"
 	"github.com/ejacobg/tourney-tracker/tournament"
 	"golang.org/x/exp/maps"
 	"golang.org/x/exp/slices"
@@ -136,7 +134,12 @@ func FromURL(URL *url.URL, username, password string) (tourney tournament.Tourna
 		return
 	}
 
-	res, err := getTournament(tournamentID, username, password)
+	req, err := newRequest(tournamentID, username, password)
+	if err != nil {
+		return
+	}
+
+	res, err := tournament.Get[response](req)
 	if err != nil {
 		return
 	}
@@ -156,30 +159,6 @@ func parseID(URL *url.URL) (tournamentID string, err error) {
 	// An ideal path would look like this: ["", "<tournamentID>"]
 	tournamentID = path[1]
 	return
-}
-
-// getTournament will make a request to the Challonge API for the given tournament, returning the response data if successful, and an error otherwise.
-// getTournament uses the tournament.Client value to make its request.
-func getTournament(tournamentID, username, password string) (*response, error) {
-	req, err := newRequest(tournamentID, username, password)
-	if err != nil {
-		return nil, err
-	}
-
-	res, err := tournament.Client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer res.Body.Close()
-
-	if res.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("unexpected response code: %d", res.StatusCode)
-	}
-
-	var data response
-	err = json.NewDecoder(res.Body).Decode(&data)
-
-	return &data, err
 }
 
 // newRequest returns a *http.Request for the given tournament using the given basic authentication credentials.

@@ -3,7 +3,9 @@ package tournament
 
 import (
 	"database/sql"
+	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"time"
 )
@@ -44,4 +46,22 @@ type Entrant struct {
 type Player struct {
 	ID   int64  `json:"id"`
 	Name string `json:"name"`
+}
+
+// Get will use the Client to send the given request. It will then attempt to fill the Response type using the data in the response body.
+func Get[Response any](req *http.Request) (*Response, error) {
+	res, err := Client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	if res.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("unexpected response code: %d", res.StatusCode)
+	}
+
+	var data Response
+	err = json.NewDecoder(res.Body).Decode(&data)
+
+	return &data, err
 }

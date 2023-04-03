@@ -6,7 +6,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"github.com/ejacobg/tourney-tracker/tournament"
 	"golang.org/x/exp/maps"
 	"golang.org/x/exp/slices"
@@ -47,33 +46,6 @@ query TournamentEventQuery($tournament: String, $event: String) {
 type request struct {
 	Query     string            `json:"query"`
 	Variables map[string]string `json:"variables"`
-}
-
-// newRequest returns a *http.Request populated with the data needed by the start.gg API.
-// See https://developer.start.gg/docs/sending-requests for more.
-func newRequest(tournamentSlug, eventSlug, key string) (*http.Request, error) {
-	data := request{
-		Query: query,
-		Variables: map[string]string{
-			"tournament": tournamentSlug,
-			"event":      eventSlug,
-		},
-	}
-
-	body, err := json.Marshal(data)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest(http.MethodPost, "https://api.start.gg/gql/alpha", bytes.NewReader(body))
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "Bearer "+key)
-
-	return req, nil
 }
 
 // response will hold the data returned from the above query.
@@ -169,7 +141,12 @@ func FromURL(URL *url.URL, key string) (tourney tournament.Tournament, entrants 
 		return
 	}
 
-	res, err := getTournament(tournamentSlug, eventSlug, key)
+	req, err := newRequest(tournamentSlug, eventSlug, key)
+	if err != nil {
+		return
+	}
+
+	res, err := tournament.Get[response](req)
 	if err != nil {
 		return
 	}
@@ -191,26 +168,29 @@ func parseSlugs(URL *url.URL) (tournamentSlug, eventSlug string, err error) {
 	return
 }
 
-// getTournament will make a request to the start.gg API for the given tournament, returning the response data if successful, and an error otherwise.
-// getTournament uses the tournament.Client value to make its request.
-func getTournament(tournamentSlug, eventSlug, key string) (*response, error) {
-	req, err := newRequest(tournamentSlug, eventSlug, key)
+// newRequest returns a *http.Request populated with the data needed by the start.gg API.
+// See https://developer.start.gg/docs/sending-requests for more.
+func newRequest(tournamentSlug, eventSlug, key string) (*http.Request, error) {
+	data := request{
+		Query: query,
+		Variables: map[string]string{
+			"tournament": tournamentSlug,
+			"event":      eventSlug,
+		},
+	}
+
+	body, err := json.Marshal(data)
 	if err != nil {
 		return nil, err
 	}
 
-	res, err := tournament.Client.Do(req)
+	req, err := http.NewRequest(http.MethodPost, "https://api.start.gg/gql/alpha", bytes.NewReader(body))
 	if err != nil {
 		return nil, err
 	}
-	defer res.Body.Close()
 
-	if res.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("unexpected response code: %d", res.StatusCode)
-	}
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer "+key)
 
-	var data response
-	err = json.NewDecoder(res.Body).Decode(&data)
-
-	return &data, err
+	return req, nil
 }
