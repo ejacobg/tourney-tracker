@@ -1,12 +1,23 @@
-### https://challonge.com/8ozc6ffz
+### https://challonge.com/kpqlgghc (Normal bracket)
+GET https://api.challonge.com/v1/tournaments/kpqlgghc.json
+    ?include_participants=1
+    &include_matches=1
+Authorization: Basic {{challonge-auth}}
+
+>>! testdata/no-reset.json
+
+### https://challonge.com/8ozc6ffz (No reset points)
 GET https://api.challonge.com/v1/tournaments/8ozc6ffz.json
     ?include_participants=1
     &include_matches=1
-Accept: application/json
 Authorization: Basic {{challonge-auth}}
 
-### https://challonge.com/t4kq4f5b (contains bracket reset)
+>>! testdata/reset-no-points.json
+
+### https://challonge.com/t4kq4f5b (Apply reset points)
 GET https://api.challonge.com/v1/tournaments/t4kq4f5b.json
-    ?api_key={{challonge}}
-    &include_participants=1
+    ?include_participants=1
     &include_matches=1
+Authorization: Basic {{challonge-auth}}
+
+>>! testdata/reset-with-points.json

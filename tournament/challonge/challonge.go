@@ -13,7 +13,7 @@ import (
 )
 
 // Note that this uses the v1 API. I had some trouble getting the v2 API to work.
-const baseURL = "https://api.challonge.com/v1/tournaments/"
+const apiURL = "https://api.challonge.com/v1/tournaments/"
 
 type response struct {
 	Tournament struct {
@@ -164,7 +164,7 @@ func parseID(URL *url.URL) (tournamentID string, err error) {
 // newRequest returns a *http.Request for the given tournament using the given basic authentication credentials.
 func newRequest(tournamentID, username, password string) (*http.Request, error) {
 	// Request URLs take the form: https://api.challonge.com/v1/tournaments/<tournamentID>.json
-	req, err := http.NewRequest(http.MethodGet, baseURL+tournamentID+".json", nil)
+	req, err := http.NewRequest(http.MethodGet, apiURL+tournamentID+".json", nil)
 	if err != nil {
 		return nil, err
 	}

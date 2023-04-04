@@ -17,6 +17,7 @@ import (
 // Obtain an API key: https://developer.start.gg/docs/authentication
 // Test your queries: https://developer.start.gg/explorer/
 
+// This query only supports up to 500 entrants. I currently do not have plans to support more than 500 entrants.
 const query = `
 query TournamentEventQuery($tournament: String, $event: String) {
     tournament(slug: $tournament) {
