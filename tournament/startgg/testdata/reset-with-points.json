@@ -1,0 +1,823 @@
+{
+  "data": {
+    "tournament": {
+      "name": "Shinto Series: Smash #1",
+      "url": "https:\/\/www.start.gg\/tournament\/shinto-series-smash-1"
+    },
+    "event": {
+      "name": "Singles 1v1",
+      "slug": "tournament\/shinto-series-smash-1\/event\/singles-1v1",
+      "entrants": {
+        "nodes": [
+          {
+            "name": "balls | FatNess",
+            "standing": {
+              "placement": 2
+            }
+          },
+          {
+            "name": "SHO | Tux",
+            "standing": {
+              "placement": 65
+            }
+          },
+          {
+            "name": "GRNT | Fluffy",
+            "standing": {
+              "placement": 5
+            }
+          },
+          {
+            "name": "SuperStriker",
+            "standing": {
+              "placement": 65
+            }
+          },
+          {
+            "name": "Saleem Shady",
+            "standing": {
+              "placement": 17
+            }
+          },
+          {
+            "name": "RVNT | Rax",
+            "standing": {
+              "placement": 17
+            }
+          },
+          {
+            "name": "TunaLink",
+            "standing": {
+              "placement": 65
+            }
+          },
+          {
+            "name": "TapuCocoa",
+            "standing": {
+              "placement": 97
+            }
+          },
+          {
+            "name": "NEIN",
+            "standing": {
+              "placement": 65
+            }
+          },
+          {
+            "name": "Baren",
+            "standing": {
+              "placement": 97
+            }
+          },
+          {
+            "name": "Theedium",
+            "standing": {
+              "placement": 17
+            }
+          },
+          {
+            "name": "SHO | Dr. Iggy",
+            "standing": {
+              "placement": 7
+            }
+          },
+          {
+            "name": "Jbandrew",
+            "standing": {
+              "placement": 97
+            }
+          },
+          {
+            "name": "Gem",
+            "standing": {
+              "placement": 97
+            }
+          },
+          {
+            "name": "LVI | Scisto",
+            "standing": {
+              "placement": 25
+            }
+          },
+          {
+            "name": "Uno",
+            "standing": {
+              "placement": 13
+            }
+          },
+          {
+            "name": "KH | Narnia",
+            "standing": {
+              "placement": 97
+            }
+          },
+          {
+            "name": "Pharah",
+            "standing": {
+              "placement": 65
+            }
+          },
+          {
+            "name": "Ang",
+            "standing": {
+              "placement": 65
+            }
+          },
+          {
+            "name": "SHO | GNT",
+            "standing": {
+              "placement": 17
+            }
+          },
+          {
+            "name": "SHO | DrHue",
+            "standing": {
+              "placement": 49
+            }
+          },
+          {
+            "name": "Ridingmypidgey",
+            "standing": {
+              "placement": 97
+            }
+          },
+          {
+            "name": "GRNT | Requiem",
+            "standing": {
+              "placement": 97
+            }
+          },
+          {
+            "name": "gratefuladdict",
+            "standing": {
+              "placement": 65
+            }
+          },
+          {
+            "name": "Apple | Borracho",
+            "standing": {
+              "placement": 33
+            }
+          },
+          {
+            "name": "Thatjuanguy",
+            "standing": {
+              "placement": 97
+            }
+          },
+          {
+            "name": "Ty",
+            "standing": {
+              "placement": 9
+            }
+          },
+          {
+            "name": "Dr. Steven",
+            "standing": {
+              "placement": 97
+            }
+          },
+          {
+            "name": "Musky",
+            "standing": {
+              "placement": 49
+            }
+          },
+          {
+            "name": "Maniake",
+            "standing": {
+              "placement": 25
+            }
+          },
+          {
+            "name": "FlyFishing Rick",
+            "standing": {
+              "placement": 97
+            }
+          },
+          {
+            "name": "DIV3 | Chip",
+            "standing": {
+              "placement": 33
+            }
+          },
+          {
+            "name": "UG | LT12",
+            "standing": {
+              "placement": 65
+            }
+          },
+          {
+            "name": "Andydemon",
+            "standing": {
+              "placement": 65
+            }
+          },
+          {
+            "name": "Jael",
+            "standing": {
+              "placement": 49
+            }
+          },
+          {
+            "name": "ISG | Dux",
+            "standing": {
+              "placement": 65
+            }
+          },
+          {
+            "name": "Tulip",
+            "standing": {
+              "placement": 49
+            }
+          },
+          {
+            "name": "Ji-Ro",
+            "standing": {
+              "placement": 25
+            }
+          },
+          {
+            "name": "BH | Asapfern",
+            "standing": {
+              "placement": 33
+            }
+          },
+          {
+            "name": "MS | Thoet",
+            "standing": {
+              "placement": 17
+            }
+          },
+          {
+            "name": "N3RD",
+            "standing": {
+              "placement": 49
+            }
+          },
+          {
+            "name": "T.H.O.T | Kople",
+            "standing": {
+              "placement": 65
+            }
+          },
+          {
+            "name": "PTM | AI",
+            "standing": {
+              "placement": 33
+            }
+          },
+          {
+            "name": "GcX | Serenity",
+            "standing": {
+              "placement": 25
+            }
+          },
+          {
+            "name": "Deadlock",
+            "standing": {
+              "placement": 65
+            }
+          },
+          {
+            "name": "Shanks",
+            "standing": {
+              "placement": 65
+            }
+          },
+          {
+            "name": "AnG | RatedRudy",
+            "standing": {
+              "placement": 65
+            }
+          },
+          {
+            "name": "Igloo!",
+            "standing": {
+              "placement": 49
+            }
+          },
+          {
+            "name": "Vertigo",
+            "standing": {
+              "placement": 97
+            }
+          },
+          {
+            "name": "CV | Jr",
+            "standing": {
+              "placement": 97
+            }
+          },
+          {
+            "name": "Lava | EV",
+            "standing": {
+              "placement": 65
+            }
+          },
+          {
+            "name": "DHS | JunE",
+            "standing": {
+              "placement": 13
+            }
+          },
+          {
+            "name": "TANK",
+            "standing": {
+              "placement": 33
+            }
+          },
+          {
+            "name": "DezoTwist",
+            "standing": {
+              "placement": 65
+            }
+          },
+          {
+            "name": "PS | Baam",
+            "standing": {
+              "placement": 33
+            }
+          },
+          {
+            "name": "4God | Ignis",
+            "standing": {
+              "placement": 9
+            }
+          },
+          {
+            "name": "PSK | RiiKy",
+            "standing": {
+              "placement": 65
+            }
+          },
+          {
+            "name": "Fellucini",
+            "standing": {
+              "placement": 65
+            }
+          },
+          {
+            "name": "WCTA | Noki",
+            "standing": {
+              "placement": 33
+            }
+          },
+          {
+            "name": "Lany",
+            "standing": {
+              "placement": 33
+            }
+          },
+          {
+            "name": "R4",
+            "standing": {
+              "placement": 65
+            }
+          },
+          {
+            "name": "RHS | mm..cookies",
+            "standing": {
+              "placement": 65
+            }
+          },
+          {
+            "name": "Fooms",
+            "standing": {
+              "placement": 33
+            }
+          },
+          {
+            "name": "diamondupree",
+            "standing": {
+              "placement": 65
+            }
+          },
+          {
+            "name": "RNW | GEW",
+            "standing": {
+              "placement": 97
+            }
+          },
+          {
+            "name": "SilverFang",
+            "standing": {
+              "placement": 65
+            }
+          },
+          {
+            "name": "HS\/WT | Kirbo",
+            "standing": {
+              "placement": 25
+            }
+          },
+          {
+            "name": "xenry0",
+            "standing": {
+              "placement": 49
+            }
+          },
+          {
+            "name": "Diamond",
+            "standing": {
+              "placement": 33
+            }
+          },
+          {
+            "name": "NS | Bruho_0",
+            "standing": {
+              "placement": 33
+            }
+          },
+          {
+            "name": "Chavalava",
+            "standing": {
+              "placement": 17
+            }
+          },
+          {
+            "name": "BossMK",
+            "standing": {
+              "placement": 97
+            }
+          },
+          {
+            "name": "Mazer | Caius",
+            "standing": {
+              "placement": 13
+            }
+          },
+          {
+            "name": "ECTA | IPlayWithAJoycon",
+            "standing": {
+              "placement": 65
+            }
+          },
+          {
+            "name": "milk",
+            "standing": {
+              "placement": 97
+            }
+          },
+          {
+            "name": "h",
+            "standing": {
+              "placement": 49
+            }
+          },
+          {
+            "name": "NS | Ra",
+            "standing": {
+              "placement": 65
+            }
+          },
+          {
+            "name": "HTT! | NerdCedric",
+            "standing": {
+              "placement": 97
+            }
+          },
+          {
+            "name": "Br1 AV",
+            "standing": {
+              "placement": 9
+            }
+          },
+          {
+            "name": "BlueLink",
+            "standing": {
+              "placement": 97
+            }
+          },
+          {
+            "name": "SHO | Purp",
+            "standing": {
+              "placement": 65
+            }
+          },
+          {
+            "name": "Samy Brawl",
+            "standing": {
+              "placement": 97
+            }
+          },
+          {
+            "name": "Exstasy | Froakzy",
+            "standing": {
+              "placement": 49
+            }
+          },
+          {
+            "name": "WR | Keanu",
+            "standing": {
+              "placement": 97
+            }
+          },
+          {
+            "name": "FORT | Cless",
+            "standing": {
+              "placement": 1
+            }
+          },
+          {
+            "name": "Zandømø",
+            "standing": {
+              "placement": 97
+            }
+          },
+          {
+            "name": "sauce.",
+            "standing": {
+              "placement": 49
+            }
+          },
+          {
+            "name": "TSM | Itatchi Gucciha",
+            "standing": {
+              "placement": 17
+            }
+          },
+          {
+            "name": "SomeDumbCanadian",
+            "standing": {
+              "placement": 49
+            }
+          },
+          {
+            "name": "SK | Lukechito",
+            "standing": {
+              "placement": 49
+            }
+          },
+          {
+            "name": "FCG | NL | Fresh",
+            "standing": {
+              "placement": 5
+            }
+          },
+          {
+            "name": "Banj | XxBanjxX",
+            "standing": {
+              "placement": 97
+            }
+          },
+          {
+            "name": "Potassium",
+            "standing": {
+              "placement": 49
+            }
+          },
+          {
+            "name": "Sck | Anality",
+            "standing": {
+              "placement": 97
+            }
+          },
+          {
+            "name": "Kusdo",
+            "standing": {
+              "placement": 97
+            }
+          },
+          {
+            "name": "CHS(CH) | Striker",
+            "standing": {
+              "placement": 33
+            }
+          },
+          {
+            "name": "Armada | Mikamora",
+            "standing": {
+              "placement": 33
+            }
+          },
+          {
+            "name": "AVHS | Shadow X",
+            "standing": {
+              "placement": 33
+            }
+          },
+          {
+            "name": "nava",
+            "standing": {
+              "placement": 65
+            }
+          },
+          {
+            "name": "Pokelover46",
+            "standing": {
+              "placement": 25
+            }
+          },
+          {
+            "name": "SCG | DarkPuma",
+            "standing": {
+              "placement": 97
+            }
+          },
+          {
+            "name": "OH\/LT | Deliboid",
+            "standing": {
+              "placement": 97
+            }
+          },
+          {
+            "name": "AK | Triple A",
+            "standing": {
+              "placement": 97
+            }
+          },
+          {
+            "name": "DXL | DelphoxBoss",
+            "standing": {
+              "placement": 97
+            }
+          },
+          {
+            "name": "EL | COLD",
+            "standing": {
+              "placement": 97
+            }
+          },
+          {
+            "name": "Sola",
+            "standing": {
+              "placement": 97
+            }
+          },
+          {
+            "name": "Chris",
+            "standing": {
+              "placement": 65
+            }
+          },
+          {
+            "name": "Frame",
+            "standing": {
+              "placement": 49
+            }
+          },
+          {
+            "name": "FSN | Player 7",
+            "standing": {
+              "placement": 65
+            }
+          },
+          {
+            "name": "TayJuice",
+            "standing": {
+              "placement": 7
+            }
+          },
+          {
+            "name": "The Anonymous | ZBeasts",
+            "standing": {
+              "placement": 17
+            }
+          },
+          {
+            "name": "GO | HalfANoodleCup",
+            "standing": {
+              "placement": 65
+            }
+          },
+          {
+            "name": "SeinfeldSB",
+            "standing": {
+              "placement": 4
+            }
+          },
+          {
+            "name": "nightwing",
+            "standing": {
+              "placement": 33
+            }
+          },
+          {
+            "name": "LostFlame",
+            "standing": {
+              "placement": 25
+            }
+          },
+          {
+            "name": "NS | NickSF",
+            "standing": {
+              "placement": 13
+            }
+          },
+          {
+            "name": "pħ | MegaJkeezy",
+            "standing": {
+              "placement": 97
+            }
+          },
+          {
+            "name": "NullRZX",
+            "standing": {
+              "placement": 65
+            }
+          },
+          {
+            "name": "Shybaka289",
+            "standing": {
+              "placement": 3
+            }
+          },
+          {
+            "name": "7seven7",
+            "standing": {
+              "placement": 25
+            }
+          },
+          {
+            "name": "pħ | Auzranium",
+            "standing": {
+              "placement": 65
+            }
+          },
+          {
+            "name": "Fija",
+            "standing": {
+              "placement": 49
+            }
+          },
+          {
+            "name": "Skunk Academy | Taco",
+            "standing": {
+              "placement": 97
+            }
+          },
+          {
+            "name": "Gaster",
+            "standing": {
+              "placement": 9
+            }
+          },
+          {
+            "name": "MrCupKakes",
+            "standing": {
+              "placement": 49
+            }
+          },
+          {
+            "name": "ECTA | Star",
+            "standing": {
+              "placement": 33
+            }
+          },
+          {
+            "name": "homey",
+            "standing": {
+              "placement": 97
+            }
+          },
+          {
+            "name": "LVA | Peparony",
+            "standing": {
+              "placement": 65
+            }
+          }
+        ]
+      },
+      "sets": {
+        "nodes": [
+          {
+            "fullRoundText": "Grand Final Reset",
+            "winnerId": 6363281
+          },
+          {
+            "fullRoundText": "Grand Final",
+            "winnerId": 6361711
+          },
+          {
+            "fullRoundText": "Losers Final",
+            "winnerId": 6361711
+          }
+        ]
+      }
+    }
+  },
+  "extensions": {
+    "cacheControl": {
+      "version": 1,
+      "hints": [
+        {
+          "path": [
+            "tournament"
+          ],
+          "maxAge": 300,
+          "scope": "PRIVATE"
+        },
+        {
+          "path": [
+            "event"
+          ],
+          "maxAge": 60,
+          "scope": "PRIVATE"
+        }
+      ]
+    },
+    "queryComplexity": 262
+  },
+  "actionRecords": []
+}

@@ -1,4 +1,4 @@
-### https://start.gg/tournament/shinto-series-smash-1/event/singles-1v1
+### https://www.start.gg/tournament/silver-state-smash-x-pirate-hackers-black-lives-matter-charity/event/singles-1v1 (Normal bracket)
 GRAPHQL https://api.start.gg/gql/alpha
 Authorization: Bearer {{startgg}}
 
@@ -9,6 +9,7 @@ query TournamentEventQuery($tournament: String, $event: String) {
     }
     event(slug: $event) {
         name
+        slug
         entrants(query: { page: 1, perPage: 500 }) {
             nodes {
                 name
@@ -20,13 +21,87 @@ query TournamentEventQuery($tournament: String, $event: String) {
         sets(page: 1, perPage: 3, sortType: RECENT) {
             nodes {
                 fullRoundText
-                lPlacement
+                winnerId
             }
         }
     }
 }
 
 {
-    "tournament": "shinto-series-smash-1",
-    "event": "tournament/shinto-series-smash-1/event/singles-1v1"
+  "tournament": "silver-state-smash-x-pirate-hackers-black-lives-matter-charity",
+  "event": "tournament/silver-state-smash-x-pirate-hackers-black-lives-matter-charity/event/singles-1v1"
 }
+
+>>! testdata/no-reset.json
+
+### https://www.start.gg/tournament/wrangler-rumble-1/event/ultimate-singles (No reset points)
+GRAPHQL https://api.start.gg/gql/alpha
+Authorization: Bearer {{startgg}}
+
+query TournamentEventQuery($tournament: String, $event: String) {
+    tournament(slug: $tournament) {
+        name
+        url(relative: false)
+    }
+    event(slug: $event) {
+        name
+        slug
+        entrants(query: { page: 1, perPage: 500 }) {
+            nodes {
+                name
+                standing {
+                    placement
+                }
+            }
+        }
+        sets(page: 1, perPage: 3, sortType: RECENT) {
+            nodes {
+                fullRoundText
+                winnerId
+            }
+        }
+    }
+}
+
+{
+  "tournament": "wrangler-rumble-1",
+  "event": "tournament/wrangler-rumble-1/event/ultimate-singles"
+}
+
+>>! testdata/reset-no-points.json
+
+### https://start.gg/tournament/shinto-series-smash-1/event/singles-1v1 (Apply reset points)
+GRAPHQL https://api.start.gg/gql/alpha
+Authorization: Bearer {{startgg}}
+
+query TournamentEventQuery($tournament: String, $event: String) {
+    tournament(slug: $tournament) {
+        name
+        url(relative: false)
+    }
+    event(slug: $event) {
+        name
+        slug
+        entrants(query: { page: 1, perPage: 500 }) {
+            nodes {
+                name
+                standing {
+                    placement
+                }
+            }
+        }
+        sets(page: 1, perPage: 3, sortType: RECENT) {
+            nodes {
+                fullRoundText
+                winnerId
+            }
+        }
+    }
+}
+
+{
+  "tournament": "shinto-series-smash-1",
+  "event": "tournament/shinto-series-smash-1/event/singles-1v1"
+}
+
+>>! testdata/reset-with-points.json

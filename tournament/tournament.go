@@ -49,6 +49,7 @@ type Player struct {
 }
 
 // Get will use the Client to send the given request. It will then attempt to fill the Response type using the data in the response body.
+// Alternatively, the Response can be an interface with the Tournament() and Entrants() methods.
 func Get[Response any](req *http.Request) (*Response, error) {
 	res, err := Client.Do(req)
 	if err != nil {

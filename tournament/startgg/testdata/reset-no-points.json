@@ -1,0 +1,133 @@
+{
+  "data": {
+    "tournament": {
+      "name": "Wrangler Rumble #1",
+      "url": "https:\/\/www.start.gg\/tournament\/wrangler-rumble-1"
+    },
+    "event": {
+      "name": "Ultimate Singles",
+      "slug": "tournament\/wrangler-rumble-1\/event\/ultimate-singles",
+      "entrants": {
+        "nodes": [
+          {
+            "name": "DHS | JunE",
+            "standing": {
+              "placement": 5
+            }
+          },
+          {
+            "name": "SWCTA | FlyingDolphin",
+            "standing": {
+              "placement": 7
+            }
+          },
+          {
+            "name": "LHS(P) | Disable",
+            "standing": {
+              "placement": 7
+            }
+          },
+          {
+            "name": "ATECH | Majean",
+            "standing": {
+              "placement": 3
+            }
+          },
+          {
+            "name": "541 | KTS",
+            "standing": {
+              "placement": 13
+            }
+          },
+          {
+            "name": "4God | Ignis",
+            "standing": {
+              "placement": 1
+            }
+          },
+          {
+            "name": "LVA | Peparony",
+            "standing": {
+              "placement": 9
+            }
+          },
+          {
+            "name": "CHS(CH) | Striker",
+            "standing": {
+              "placement": 9
+            }
+          },
+          {
+            "name": "ECTA | Star",
+            "standing": {
+              "placement": 5
+            }
+          },
+          {
+            "name": "WCTA | Exile",
+            "standing": {
+              "placement": 4
+            }
+          },
+          {
+            "name": "homey",
+            "standing": {
+              "placement": 9
+            }
+          },
+          {
+            "name": "SHO | Dr. Iggy",
+            "standing": {
+              "placement": 2
+            }
+          },
+          {
+            "name": "SWCTA | h",
+            "standing": {
+              "placement": 9
+            }
+          }
+        ]
+      },
+      "sets": {
+        "nodes": [
+          {
+            "fullRoundText": "Grand Final Reset",
+            "winnerId": 6329260
+          },
+          {
+            "fullRoundText": "Grand Final",
+            "winnerId": 6329260
+          },
+          {
+            "fullRoundText": "Losers Final",
+            "winnerId": 6329260
+          }
+        ]
+      }
+    }
+  },
+  "extensions": {
+    "cacheControl": {
+      "version": 1,
+      "hints": [
+        {
+          "path": [
+            "tournament"
+          ],
+          "maxAge": 300,
+          "scope": "PRIVATE"
+        },
+        {
+          "path": [
+            "event"
+          ],
+          "maxAge": 60,
+          "scope": "PRIVATE"
+        }
+      ]
+    },
+    "queryComplexity": 32
+  },
+  "actionRecords": []
+}

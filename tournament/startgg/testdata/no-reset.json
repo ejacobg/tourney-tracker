@@ -1,0 +1,307 @@
+{
+  "data": {
+    "tournament": {
+      "name": "Silver State Smash x Pirate Hackers Black Lives Matter Charity Tournament",
+      "url": "https:\/\/www.start.gg\/tournament\/silver-state-smash-x-pirate-hackers-black-lives-matter-charity"
+    },
+    "event": {
+      "name": "Singles 1v1",
+      "slug": "tournament\/silver-state-smash-x-pirate-hackers-black-lives-matter-charity\/event\/singles-1v1",
+      "entrants": {
+        "nodes": [
+          {
+            "name": "Zyro",
+            "standing": {
+              "placement": 2
+            }
+          },
+          {
+            "name": "WAR | IllusioN",
+            "standing": {
+              "placement": 17
+            }
+          },
+          {
+            "name": "SHO | Tux",
+            "standing": {
+              "placement": 5
+            }
+          },
+          {
+            "name": "CjMaster11",
+            "standing": {
+              "placement": 33
+            }
+          },
+          {
+            "name": "pħ | The Law",
+            "standing": {
+              "placement": 9
+            }
+          },
+          {
+            "name": "Cryp",
+            "standing": {
+              "placement": 33
+            }
+          },
+          {
+            "name": "ECTA | Takemoto",
+            "standing": {
+              "placement": 33
+            }
+          },
+          {
+            "name": "FSG  \/ テア | Ferun",
+            "standing": {
+              "placement": 33
+            }
+          },
+          {
+            "name": "BlueLink",
+            "standing": {
+              "placement": 25
+            }
+          },
+          {
+            "name": "Derpington",
+            "standing": {
+              "placement": 7
+            }
+          },
+          {
+            "name": "SMHS | Mr.NiSpots",
+            "standing": {
+              "placement": 25
+            }
+          },
+          {
+            "name": "LVI | Scisto",
+            "standing": {
+              "placement": 7
+            }
+          },
+          {
+            "name": "PFe | Ginja",
+            "standing": {
+              "placement": 33
+            }
+          },
+          {
+            "name": "CHS (CH) | Dr. Hex",
+            "standing": {
+              "placement": 25
+            }
+          },
+          {
+            "name": "Olkios",
+            "standing": {
+              "placement": 5
+            }
+          },
+          {
+            "name": "Angelic",
+            "standing": {
+              "placement": 33
+            }
+          },
+          {
+            "name": "pħ | Auzranium",
+            "standing": {
+              "placement": 33
+            }
+          },
+          {
+            "name": "FSG | Nugget",
+            "standing": {
+              "placement": 13
+            }
+          },
+          {
+            "name": "Theedium",
+            "standing": {
+              "placement": 1
+            }
+          },
+          {
+            "name": "SHO | Dr. Iggy",
+            "standing": {
+              "placement": 4
+            }
+          },
+          {
+            "name": "Mankuku",
+            "standing": {
+              "placement": 33
+            }
+          },
+          {
+            "name": "SHO | DrHue",
+            "standing": {
+              "placement": 9
+            }
+          },
+          {
+            "name": "Truth",
+            "standing": {
+              "placement": 17
+            }
+          },
+          {
+            "name": "ATECH | Majean",
+            "standing": {
+              "placement": 17
+            }
+          },
+          {
+            "name": "DHS | JunE",
+            "standing": {
+              "placement": 9
+            }
+          },
+          {
+            "name": "Delta",
+            "standing": {
+              "placement": 17
+            }
+          },
+          {
+            "name": "CHS(CH) | Shine",
+            "standing": {
+              "placement": 25
+            }
+          },
+          {
+            "name": "ATECH | poizzzn",
+            "standing": {
+              "placement": 25
+            }
+          },
+          {
+            "name": "ECTA | Star",
+            "standing": {
+              "placement": 13
+            }
+          },
+          {
+            "name": "inheriter",
+            "standing": {
+              "placement": 25
+            }
+          },
+          {
+            "name": "WCTA | Noki",
+            "standing": {
+              "placement": 17
+            }
+          },
+          {
+            "name": "FlyingDolphin",
+            "standing": {
+              "placement": 17
+            }
+          },
+          {
+            "name": "Lington",
+            "standing": {
+              "placement": 33
+            }
+          },
+          {
+            "name": "16B | Br0wn",
+            "standing": {
+              "placement": 13
+            }
+          },
+          {
+            "name": "L7 | Disable",
+            "standing": {
+              "placement": 17
+            }
+          },
+          {
+            "name": "BLM | IPlayWithAJoycon",
+            "standing": {
+              "placement": 33
+            }
+          },
+          {
+            "name": "h",
+            "standing": {
+              "placement": 13
+            }
+          },
+          {
+            "name": "MrCupKakes",
+            "standing": {
+              "placement": 25
+            }
+          },
+          {
+            "name": "LVA | Peparony",
+            "standing": {
+              "placement": 25
+            }
+          },
+          {
+            "name": "FSG | Crazy Dave",
+            "standing": {
+              "placement": 9
+            }
+          },
+          {
+            "name": "DSA | Mishunz",
+            "standing": {
+              "placement": 17
+            }
+          },
+          {
+            "name": "SHO | GNT",
+            "standing": {
+              "placement": 3
+            }
+          }
+        ]
+      },
+      "sets": {
+        "nodes": [
+          {
+            "fullRoundText": "Grand Final",
+            "winnerId": 6487939
+          },
+          {
+            "fullRoundText": "Losers Final",
+            "winnerId": 6491886
+          },
+          {
+            "fullRoundText": "Losers Semi-Final",
+            "winnerId": 6471333
+          }
+        ]
+      }
+    }
+  },
+  "extensions": {
+    "cacheControl": {
+      "version": 1,
+      "hints": [
+        {
+          "path": [
+            "tournament"
+          ],
+          "maxAge": 300,
+          "scope": "PRIVATE"
+        },
+        {
+          "path": [
+            "event"
+          ],
+          "maxAge": 60,
+          "scope": "PRIVATE"
+        }
+      ]
+    },
+    "queryComplexity": 90
+  },
+  "actionRecords": []
+}

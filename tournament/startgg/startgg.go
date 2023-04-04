@@ -53,16 +53,16 @@ type response struct {
 	Data struct {
 		Tournament struct {
 			Name string
-			URL  string
 		}
 		Event struct {
 			Name     string
+			Slug     string
 			Entrants struct {
 				Nodes []entrant
 			}
-		}
-		Sets struct {
-			Nodes []set
+			Sets struct {
+				Nodes []set
+			}
 		}
 	}
 }
@@ -76,15 +76,15 @@ type entrant struct {
 
 type set struct {
 	FullRoundText string
-	LPlacement    int
+	WinnerID      int
 }
 
 // tournament will create a tournament.Tournament object using the data from the response.
 func (r *response) tournament() tournament.Tournament {
 	return tournament.Tournament{
-		Name:         r.Data.Tournament.Name,
-		URL:          r.Data.Tournament.URL,
-		BracketReset: applyResetPoints(r.Data.Sets.Nodes),
+		Name:         r.Data.Tournament.Name + " - " + r.Data.Event.Name,
+		URL:          "https://start.gg/" + r.Data.Event.Slug,
+		BracketReset: applyResetPoints(r.Data.Event.Sets.Nodes),
 		Placements:   uniquePlacements(r.Data.Event.Entrants.Nodes),
 	}
 }
@@ -98,11 +98,23 @@ func (r *response) entrants() (entrants []tournament.Entrant) {
 }
 
 // applyResetPoints returns true if the second-place finisher made a bracket reset.
+// Bracket reset points should be applied if:
+//  1. There exists a "Grand Final" and "Grand Final Reset" round.
+//  2. The winners of the grand final and grand final reset are different.
 func applyResetPoints(sets []set) bool {
-	return slices.ContainsFunc(sets, func(s set) bool {
-		// This feels wrong. Double-check the logic here.
-		return s.FullRoundText == "Grand Final Reset" && s.LPlacement == 2
+	reset := slices.IndexFunc(sets, func(s set) bool {
+		return s.FullRoundText == "Grand Final Reset"
 	})
+	if reset == -1 {
+		return false
+	}
+
+	grands := slices.IndexFunc(sets, func(s set) bool {
+		return s.FullRoundText == "Grand Final"
+	})
+	// If the Grand Final Reset exists, then the Grand Final should also exist (i.e. grands should always be a valid index).
+
+	return sets[reset].WinnerID != sets[grands].WinnerID
 }
 
 // uniquePlacements returns the unique placements across all the given entrants, in reverse-sorted order.
