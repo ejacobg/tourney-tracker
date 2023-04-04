@@ -21,10 +21,10 @@ const query = `
 query TournamentEventQuery($tournament: String, $event: String) {
     tournament(slug: $tournament) {
         name
-        url(relative: false)
     }
     event(slug: $event) {
         name
+        slug
         entrants(query: { page: 1, perPage: 500 }) {
             nodes {
                 name
@@ -36,7 +36,7 @@ query TournamentEventQuery($tournament: String, $event: String) {
         sets(page: 1, perPage: 3, sortType: RECENT) {
             nodes {
                 fullRoundText
-                lPlacement
+                winnerId
             }
         }
     }
