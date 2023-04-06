@@ -14,6 +14,7 @@
 {{define "title"}}Tournaments{{end}}
 
 {{define "main"}}
+    <h2>Viewing Tournaments</h2>
     <form hx-post="/tournaments/new" hx-target="#response" novalidate>
         <label>
             Add a tournament: <input type="text" name="url" placeholder="Paste tournament link..."/>
@@ -28,6 +29,8 @@
         <tr>
             <th>Name</th>
             <th>Tier</th>
+            <th></th>
+            <th></th>
         </tr>
         </thead>
         <tbody>

@@ -36,6 +36,7 @@ func main() {
 	}
 
 	http.HandleFunc("/", controller.Index)
+	http.Handle("/static/", http.StripPrefix("/static", http.FileServer(http.Dir("ui/static"))))
 
 	fmt.Println("Serving on http://localhost:4000")
 	log.Fatalln(http.ListenAndServe(":4000", nil))
