@@ -1,15 +1,16 @@
-package tournament
+package controller
 
 import (
 	"bytes"
 	"fmt"
+	"github.com/ejacobg/tourney-tracker/tournament"
 	"html/template"
 	"net/http"
 )
 
 // Controller provides several HTTP handlers for servicing tournament-related requests.
 type Controller struct {
-	Model Model
+	Model tournament.Model
 	Views struct {
 		Index, View, Edit *template.Template
 	}
@@ -38,4 +39,10 @@ func (c *Controller) Index(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(200)
 	buf.WriteTo(w)
+}
+
+// New accepts form data consisting of a "url" field containing a URL to a tournament.
+// If the URL can be converted to a Tournament object, a redirect will be returned, otherwise an HTML response will be returned.
+func (c *Controller) New(w http.ResponseWriter, r *http.Request) {
+
 }
