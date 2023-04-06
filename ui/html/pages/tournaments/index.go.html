@@ -1,0 +1,44 @@
+{{- /*
+  Renders a text box for adding a new tournament, as well as a table displaying all saved tournaments.
+
+  Data:
+    .:                  []Preview
+    Preview.ID:         int64
+    Preview.Tournament: string
+    Preview.Tier:       string
+
+  Previews are subsets of Tournament objects.
+*/ -}}
+
+
+{{define "title"}}Tournaments{{end}}
+
+{{define "main"}}
+    <form hx-post="/tournaments/new" hx-target="#response" novalidate>
+        <label>
+            Add a tournament: <input type="text" name="url" placeholder="Paste tournament link..."/>
+        </label>
+        <button type="submit">Add Tournament</button>
+    </form>
+    <div id="response">
+        {{- /* If a Tournament could not be created from the submitted link, an HTML response will be sent and rendered here. */ -}}
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Tier</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{range .}}
+            <tr>
+                <td><a href="/tournaments/{{.ID}}">{{.Tournament}}</a></td>
+                <td>{{.Tier}}</td>
+                <td><a href="/tournaments/{{.ID}}/edit}}">Edit</a></td>
+                <td><a href="https://htmx.org/examples/delete-row/">Delete</a></td>
+            </tr>
+        {{end}}
+        </tbody>
+    </table>
+{{end}}

@@ -1,0 +1,25 @@
+{{define "base"}}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport">
+        <title>{{template "title" .}}</title>
+        <link rel="stylesheet" href="/static/css/main.css">
+        <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon">
+        <script src="https://unpkg.com/htmx.org@1.8.6" integrity="sha384-Bj8qm/6B+71E6FQSySofJOUjA/gq330vEqjFx9LakWybUySyI1IQHwPtbTU7bNwx" crossorigin="anonymous"></script>
+    </head>
+    <body>
+    <header>
+        {{template "nav" .}}
+    </header>
+    <main>
+        {{template "main" .}}
+    </main>
+    <footer>
+        Made by <a href="https://ejacobg.com">Ean Jacob Gayban</a>. View source on <a href="https://github.com/ejacobg/tourney-tracker">GitHub</a>.
+    </footer>
+    <script src="/static/js/main.js" type="text/javascript"></script>
+    </body>
+    </html>
+{{end}}
