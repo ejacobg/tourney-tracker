@@ -2,6 +2,7 @@ package controller
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"github.com/ejacobg/tourney-tracker/convert/challonge"
 	"github.com/ejacobg/tourney-tracker/convert/startgg"
@@ -32,7 +33,7 @@ func New(challongeUsername, challongePassword, startggKey string) *Controller {
 }
 
 // Index renders a table of all saved tournaments, as well as a form for adding a new one.
-func (c *Controller) Index(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) Index(w http.ResponseWriter, _ *http.Request) {
 	previews, err := c.Model.GetPreviews()
 	if err != nil {
 		http.Error(w, "Failed to retrieve previews.", http.StatusInternalServerError)
@@ -68,7 +69,7 @@ func (c *Controller) New(w http.ResponseWriter, r *http.Request) {
 
 	URL, err := url.Parse(r.PostForm.Get("url"))
 	if err != nil {
-		http.Error(w, "Failed to parse form.", http.StatusUnprocessableEntity)
+		http.Error(w, "Failed to parse URL.", http.StatusUnprocessableEntity)
 		return
 	}
 
@@ -87,7 +88,12 @@ func (c *Controller) New(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err != nil {
-		http.Error(w, "Unrecognized host: "+URL.Host, http.StatusUnprocessableEntity)
+		switch {
+		case errors.Is(err, tournament.ErrUnrecognizedURL):
+			http.Error(w, fmt.Sprintf("Unrecognized host: %q", URL.Host), http.StatusUnprocessableEntity)
+		default:
+			http.Error(w, fmt.Sprintf("Parsing error: %s", err), http.StatusUnprocessableEntity)
+		}
 		return
 	}
 

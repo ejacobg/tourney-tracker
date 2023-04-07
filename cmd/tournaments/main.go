@@ -30,12 +30,12 @@ func main() {
 		log.Fatalln("Failed to connect to database:", err)
 	}
 
-	ctl := controller.New(*challongeUsername, *challongePassword, *startggKey)
-	ctl.Model = tournament.Model{db}
-	ctl.Views.Index = index
+	ctlr := controller.New(*challongeUsername, *challongePassword, *startggKey)
+	ctlr.Model = tournament.Model{db}
+	ctlr.Views.Index = index
 
-	http.HandleFunc("/", ctl.Index)
-	http.HandleFunc("/tournaments/new", ctl.New)
+	http.HandleFunc("/", ctlr.Index)
+	http.HandleFunc("/tournaments/new", ctlr.New)
 	http.Handle("/static/", http.StripPrefix("/static", http.FileServer(http.Dir("ui/static"))))
 
 	fmt.Println("Serving on http://localhost:4000")
