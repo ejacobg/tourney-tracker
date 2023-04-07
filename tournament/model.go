@@ -1,6 +1,9 @@
 package tournament
 
-import "database/sql"
+import (
+	"database/sql"
+	"github.com/lib/pq"
+)
 
 // Model provides several methods for interacting with the database.
 type Model struct {
@@ -38,4 +41,44 @@ INNER JOIN tiers on tiers.id = tournaments.tier_id`
 	}
 
 	return previews, rows.Err()
+}
+
+func (m Model) Insert(tourney *Tournament, entrants []Entrant) error {
+	tx, err := m.DB.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	// Hard-coding the tier ID. Right now, I'm assuming that the C-tier ID will always exist.
+	// A better solution might be to write a sub-query for these.
+	query := `
+WITH tourney AS (
+    INSERT INTO tournaments (name, url, bracket_reset, placements, tier_id)
+        VALUES ($1, $2, $3, $4, 1)
+        RETURNING id, tier_id)
+SELECT tourney.id, tourney.tier_id, tiers.name, tiers.multiplier
+FROM tourney
+         INNER JOIN tiers on tourney.tier_id = 1;`
+
+	err = m.DB.QueryRow(query, tourney.Name, tourney.URL, tourney.BracketReset, pq.Array(tourney.Placements)).
+		Scan(&tourney.ID, &tourney.Tier.ID, &tourney.Tier.Name, &tourney.Tier.Multiplier)
+	if err != nil {
+		return err
+	}
+
+	query = `
+INSERT INTO entrants (name, placement, tournament_id)
+VALUES ($1, $2, $3)
+RETURNING id;`
+
+	for i, entrant := range entrants {
+		// This will update the entrant IDs as it goes along. If any errors occur, any written IDs will be invalidated.
+		err = m.DB.QueryRow(query, entrant.Name, entrant.Placement, tourney.ID).Scan(&entrants[i].ID)
+		if err != nil {
+			return err
+		}
+	}
+
+	return tx.Commit()
 }

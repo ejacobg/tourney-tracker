@@ -21,7 +21,8 @@
         </label>
         <button type="submit">Add Tournament</button>
     </form>
-    <div id="response">
+    <div id="response" style="color: red" hx-swap="innerHTML">
+        test
         {{- /* If a Tournament could not be created from the submitted link, an HTML response will be sent and rendered here. */ -}}
     </div>
     <table>
@@ -38,7 +39,7 @@
             <tr>
                 <td><a href="/tournaments/{{.ID}}">{{.Tournament}}</a></td>
                 <td>{{.Tier}}</td>
-                <td><a href="/tournaments/{{.ID}}/edit}}">Edit</a></td>
+                <td><a href="/tournaments/{{.ID}}/edit">Edit</a></td>
                 <td><a href="https://htmx.org/examples/delete-row/">Delete</a></td>
             </tr>
         {{end}}

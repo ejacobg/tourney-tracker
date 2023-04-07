@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/ejacobg/tourney-tracker/tournament"
+	"github.com/ejacobg/tourney-tracker/tournament/controller"
 	"html/template"
 	"log"
 	"net/http"
@@ -14,6 +15,9 @@ import (
 
 func main() {
 	dsn := flag.String("dsn", "", "PostgreSQL DSN")
+	challongeUsername := flag.String("challonge-user", "", "Challonge Username")
+	challongePassword := flag.String("challonge-pass", "", "Challonge Password or API Key")
+	startggKey := flag.String("startgg-key", "", "start.gg API Key")
 	flag.Parse()
 
 	index, err := template.New("index").ParseFiles("ui/html/base.go.html", "ui/html/partials/nav.go.html", "ui/html/pages/tournaments/index.go.html")
@@ -26,16 +30,12 @@ func main() {
 		log.Fatalln("Failed to connect to database:", err)
 	}
 
-	controller := tournament.Controller{
-		Model: tournament.Model{db},
-		Views: struct {
-			Index, View, Edit *template.Template
-		}{
-			index, nil, nil,
-		},
-	}
+	ctl := controller.New(*challongeUsername, *challongePassword, *startggKey)
+	ctl.Model = tournament.Model{db}
+	ctl.Views.Index = index
 
-	http.HandleFunc("/", controller.Index)
+	http.HandleFunc("/", ctl.Index)
+	http.HandleFunc("/tournaments/new", ctl.New)
 	http.Handle("/static/", http.StripPrefix("/static", http.FileServer(http.Dir("ui/static"))))
 
 	fmt.Println("Serving on http://localhost:4000")
