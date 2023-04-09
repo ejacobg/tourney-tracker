@@ -1,0 +1,48 @@
+{{- /*
+  Renders tournament information, including name, URL, tier, entrants (with associated player) and their points earned.
+  Each entrant has an associated "edit" button that allows the user to change their associated player.
+  The tournament tier also has an edit button that allows the user to change the tier.
+
+  Data:
+    .Tourney:  []Tournament
+    .Entrants: []Entrant
+    .Points:   map[int]int
+        Maps a player's placement to the number of points they should receive.
+*/ -}}
+
+{{define "title"}}{{.Tourney.Name}}{{end}}
+
+{{define "main"}}
+    <h2>{{.Tourney.Name}}</h2>
+    <p><a href="{{.Tourney.URL}}">{{.Tourney.URL}}</a></p>
+    <p>Tier: {{.Tourney.Tier.Name}}
+        <button>Edit</button>
+    </p>
+    <p>Entrants: {{len .Entrants}}</p>
+    <h3>Entrants</h3>
+    <table>
+        <thead>
+        <tr>
+            <th>Entrant</th>
+            <th>Player</th>
+            <th>Points Earned</th>
+            <th>Placing</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {{range .Entrants}}
+            <tr>
+                <td>{{.Name}}</td>
+                <td>{{.PlayerName.String}}</td>
+                <td>{{index $.Points .Placement}}</td>
+                <td>{{.Placement}}</td>
+                <td>
+                    <button>Edit</button>
+                </td>
+            </tr>
+        {{end}}
+        </tbody>
+    </table>
+{{end}}
+

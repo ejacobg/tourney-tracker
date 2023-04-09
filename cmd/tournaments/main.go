@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/ejacobg/tourney-tracker/tournament"
 	"github.com/ejacobg/tourney-tracker/tournament/controller"
+	"github.com/julienschmidt/httprouter"
 	"html/template"
 	"log"
 	"net/http"
@@ -25,6 +26,11 @@ func main() {
 		log.Fatalln("Failed to create template:", err)
 	}
 
+	view, err := template.New("view").ParseFiles("ui/html/base.go.html", "ui/html/partials/nav.go.html", "ui/html/pages/tournaments/view.go.html")
+	if err != nil {
+		log.Fatalln("Failed to create template:", err)
+	}
+
 	db, err := openDB(*dsn)
 	if err != nil {
 		log.Fatalln("Failed to connect to database:", err)
@@ -33,13 +39,16 @@ func main() {
 	ctlr := controller.New(*challongeUsername, *challongePassword, *startggKey)
 	ctlr.Model = tournament.Model{db}
 	ctlr.Views.Index = index
+	ctlr.Views.View = view
 
-	http.HandleFunc("/", ctlr.Index)
-	http.HandleFunc("/tournaments/new", ctlr.New)
-	http.Handle("/static/", http.StripPrefix("/static", http.FileServer(http.Dir("ui/static"))))
+	router := httprouter.New()
+	router.HandlerFunc("GET", "/", ctlr.Index)
+	router.HandlerFunc("POST", "/tournaments/new", ctlr.New)
+	router.HandlerFunc("GET", "/tournaments/:id", ctlr.View)
+	router.Handler("GET", "/static/*filepath", http.FileServer(http.Dir("ui")))
 
 	fmt.Println("Serving on http://localhost:4000")
-	log.Fatalln(http.ListenAndServe(":4000", nil))
+	log.Fatalln(http.ListenAndServe(":4000", router))
 }
 
 func openDB(dsn string) (*sql.DB, error) {

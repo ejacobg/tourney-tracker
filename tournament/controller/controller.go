@@ -7,9 +7,11 @@ import (
 	"github.com/ejacobg/tourney-tracker/convert/challonge"
 	"github.com/ejacobg/tourney-tracker/convert/startgg"
 	"github.com/ejacobg/tourney-tracker/tournament"
+	"github.com/julienschmidt/httprouter"
 	"html/template"
 	"net/http"
 	"net/url"
+	"strconv"
 )
 
 // Controller provides several HTTP handlers for servicing tournament-related requests.
@@ -106,4 +108,44 @@ func (c *Controller) New(w http.ResponseWriter, r *http.Request) {
 	redirect := fmt.Sprintf("/tournaments/%d", tourney.ID)
 	w.Header()["HX-Redirect"] = []string{redirect}
 	http.Redirect(w, r, redirect, http.StatusCreated)
+}
+
+// View will read the "id" route parameter and display the details for the given tournament.
+func (c *Controller) View(w http.ResponseWriter, r *http.Request) {
+	params := httprouter.ParamsFromContext(r.Context())
+
+	id, err := strconv.ParseInt(params.ByName("id"), 10, 64)
+	if err != nil || id < 1 {
+		http.NotFound(w, r)
+		return
+	}
+
+	tourney, entrants, err := c.Model.Get(id)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Failed to retrieve tournament: %s", err), http.StatusInternalServerError)
+		return
+	}
+
+	points := tournament.NewPointMap(tourney.BracketReset, tourney.Placements, tourney.Tier.Multiplier)
+
+	if c.Views.View == nil {
+		http.Error(w, "View page does not exist.", http.StatusInternalServerError)
+		return
+	}
+
+	buf := new(bytes.Buffer)
+
+	err = c.Views.View.ExecuteTemplate(buf, "base", map[string]any{
+		"Tourney":  tourney,
+		"Entrants": entrants,
+		"Points":   points,
+	})
+
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Failed to render template: %s", err), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(200)
+	buf.WriteTo(w)
 }
