@@ -81,9 +81,9 @@ func in(id int, ids ...int) bool {
 }
 
 // uniquePlacements returns the unique placements across all the given entrants, in reverse-sorted order.
-func uniquePlacements(participants []participant) []int {
+func uniquePlacements(participants []participant) []int64 {
 	// Keep track of all the placements we've seen before.
-	placements := make(map[int]bool)
+	placements := make(map[int64]bool)
 
 	// If we come across a placement we haven't seen before, add it to the map.
 	for _, p := range participants {
@@ -96,7 +96,7 @@ func uniquePlacements(participants []participant) []int {
 	keys := maps.Keys(placements)
 
 	// Sort our keys in descending order.
-	slices.SortFunc(keys, func(a, b int) bool {
+	slices.SortFunc(keys, func(a, b int64) bool {
 		return a > b
 	})
 
@@ -117,7 +117,7 @@ type participant struct {
 	Participant struct {
 		ID        int    `json:"id"`
 		Name      string `json:"name"`
-		FinalRank int    `json:"final_rank"`
+		FinalRank int64  `json:"final_rank"`
 	}
 }
 

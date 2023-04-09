@@ -71,7 +71,7 @@ type response struct {
 type entrant struct {
 	Name     string
 	Standing struct {
-		Placement int
+		Placement int64
 	}
 }
 
@@ -119,9 +119,9 @@ func applyResetPoints(sets []set) bool {
 }
 
 // uniquePlacements returns the unique placements across all the given entrants, in reverse-sorted order.
-func uniquePlacements(entrants []entrant) []int {
+func uniquePlacements(entrants []entrant) []int64 {
 	// Keep track of all the placements we've seen before.
-	placements := make(map[int]bool)
+	placements := make(map[int64]bool)
 
 	// If we come across a placement we haven't seen before, add it to the map.
 	for _, e := range entrants {
@@ -134,7 +134,7 @@ func uniquePlacements(entrants []entrant) []int {
 	keys := maps.Keys(placements)
 
 	// Sort our keys in descending order.
-	slices.SortFunc(keys, func(a, b int) bool {
+	slices.SortFunc(keys, func(a, b int64) bool {
 		return a > b
 	})
 
