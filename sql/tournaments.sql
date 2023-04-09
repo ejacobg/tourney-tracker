@@ -19,3 +19,8 @@ WITH tourney AS (
 SELECT tourney.id, tourney.tier_id, tiers.name, tiers.multiplier
 FROM tourney
          INNER JOIN tiers on tourney.tier_id = 1;
+
+-- This is the query used by Model.Get().
+SELECT tournaments.id, tournaments.name, url, bracket_reset, placements, tier_id, tiers.name, tiers.multiplier
+FROM tournaments INNER JOIN tiers ON tier_id = tiers.id
+WHERE tournaments.id = 1;
