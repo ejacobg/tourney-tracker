@@ -149,3 +149,76 @@ func (c *Controller) View(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(200)
 	buf.WriteTo(w)
 }
+
+// ViewTier will respond with an element displaying the tournament's tier, alongside a button to go to the tier editing form.
+func (c *Controller) ViewTier(w http.ResponseWriter, r *http.Request) {
+	params := httprouter.ParamsFromContext(r.Context())
+
+	id, err := strconv.ParseInt(params.ByName("id"), 10, 64)
+	if err != nil || id < 1 {
+		http.NotFound(w, r)
+		return
+	}
+
+	tier, err := c.Model.GetTier(id)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Failed to get tier: %s", err), http.StatusInternalServerError)
+	}
+
+	if c.Views.View == nil {
+		http.Error(w, "View tier template does not exist.", http.StatusInternalServerError)
+		return
+	}
+
+	buf := new(bytes.Buffer)
+
+	err = c.Views.View.ExecuteTemplate(buf, "tier", map[string]any{
+		"TournamentID": id,
+		"Tier":         tier,
+	})
+
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Failed to render template: %s", err), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(200)
+	buf.WriteTo(w)
+}
+
+// EditTier will respond with a form element that allows for changing of a tournament's tier.
+func (c *Controller) EditTier(w http.ResponseWriter, r *http.Request) {
+	params := httprouter.ParamsFromContext(r.Context())
+
+	id, err := strconv.ParseInt(params.ByName("id"), 10, 64)
+	if err != nil || id < 1 {
+		http.NotFound(w, r)
+		return
+	}
+
+	tiers, err := c.Model.GetTiers()
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Failed to get tiers: %s", err), http.StatusInternalServerError)
+		return
+	}
+
+	if c.Views.Edit == nil {
+		http.Error(w, "Edit tier template does not exist.", http.StatusInternalServerError)
+		return
+	}
+
+	buf := new(bytes.Buffer)
+
+	err = c.Views.Edit.ExecuteTemplate(buf, "tier", map[string]any{
+		"TournamentID": id,
+		"Tiers":        tiers,
+	})
+
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Failed to render template: %s", err), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(200)
+	buf.WriteTo(w)
+}

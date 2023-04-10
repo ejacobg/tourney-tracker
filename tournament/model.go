@@ -144,3 +144,37 @@ WHERE tournament_id = $1;`
 
 	return tourney, entrants, rows.Err()
 }
+
+func (m Model) GetTiers() (tiers []Tier, err error) {
+	query := `
+SELECT id, name, multiplier
+FROM tiers;`
+
+	rows, err := m.DB.Query(query)
+	if err != nil {
+		return
+	}
+
+	for rows.Next() {
+		var tier Tier
+
+		err = rows.Scan(&tier.ID, &tier.Name, &tier.Multiplier)
+		if err != nil {
+			return
+		}
+
+		tiers = append(tiers, tier)
+	}
+
+	return tiers, rows.Err()
+}
+
+func (m Model) GetTier(tournamentID int64) (tier Tier, err error) {
+	query := `
+SELECT tiers.id, tiers.name, multiplier
+FROM tournaments
+INNER JOIN tiers on tournaments.tier_id = tiers.id
+WHERE tournaments.id = $1;`
+
+	return tier, m.DB.QueryRow(query, tournamentID).Scan(&tier.ID, &tier.Name, &tier.Multiplier)
+}

@@ -15,8 +15,9 @@
 {{define "main"}}
     <h2>{{.Tourney.Name}}</h2>
     <p><a href="{{.Tourney.URL}}">{{.Tourney.URL}}</a></p>
-    <p>Tier: {{.Tourney.Tier.Name}}
-        <button>Edit</button>
+    <p hx-target="this" hx-swap="outerHTML">
+        Tier: {{.Tourney.Tier.Name}}
+        <button hx-get="/tournaments/{{.Tourney.ID}}/tier/edit">Edit</button>
     </p>
     <p>Entrants: {{len .Entrants}}</p>
     <h3>Entrants</h3>
@@ -46,3 +47,17 @@
     </table>
 {{end}}
 
+{{- /*
+  Displays a Tier, with a button that swaps this element to the tier editing form.
+  The endpoint for the edit form (currently /tournaments/:id/tier/edit) is subject to change.
+
+  Data:
+    .Tier:         Tier
+    .TournamentID: int64
+*/ -}}
+{{define "tier"}}
+    <p hx-target="this" hx-swap="outerHTML">
+        Tier: {{.Tier.Name}}
+        <button hx-get="/tournaments/{{.TournamentID}}/tier/edit">Edit</button>
+    </p>
+{{end}}

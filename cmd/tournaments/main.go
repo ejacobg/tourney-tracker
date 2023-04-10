@@ -31,6 +31,11 @@ func main() {
 		log.Fatalln("Failed to create template:", err)
 	}
 
+	edit, err := template.New("edit").ParseFiles("ui/html/pages/tournaments/edit.go.html")
+	if err != nil {
+		log.Fatalln("Failed to create template:", err)
+	}
+
 	db, err := openDB(*dsn)
 	if err != nil {
 		log.Fatalln("Failed to connect to database:", err)
@@ -40,11 +45,14 @@ func main() {
 	ctlr.Model = tournament.Model{db}
 	ctlr.Views.Index = index
 	ctlr.Views.View = view
+	ctlr.Views.Edit = edit
 
 	router := httprouter.New()
 	router.HandlerFunc("GET", "/", ctlr.Index)
 	router.HandlerFunc("POST", "/tournaments/new", ctlr.New)
 	router.HandlerFunc("GET", "/tournaments/:id", ctlr.View)
+	router.HandlerFunc("GET", "/tournaments/:id/tier", ctlr.ViewTier)
+	router.HandlerFunc("GET", "/tournaments/:id/tier/edit", ctlr.EditTier)
 	router.Handler("GET", "/static/*filepath", http.FileServer(http.Dir("ui")))
 
 	fmt.Println("Serving on http://localhost:4000")

@@ -1,0 +1,24 @@
+{{- /*
+  Renders a form that allows for a tournament's tier to be selected.
+
+  Data:
+    .TournamentID: int64
+    .Tiers:        []Tier
+        Represents all the available tiers.
+
+*/ -}}
+
+{{define "tier"}}
+    <form hx-put="/tournaments/{{.TournamentID}}/tier" hx-target="this" hx-swap="outerHTML">
+        <p>
+            <label for="tier">Tier: </label>
+            <select name="tier" id="tier">
+                {{range .Tiers}}
+                    <option value="{{.ID}}">{{.Name}}</option>
+                {{end}}
+            </select>
+            <button>Submit</button>
+            <button hx-get="/tournaments/{{.TournamentID}}/tier">Cancel</button>
+        </p>
+    </form>
+{{end}}
