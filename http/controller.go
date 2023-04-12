@@ -1,12 +1,14 @@
-package controller
+package tournament
 
 import (
 	"bytes"
 	"errors"
 	"fmt"
+	tournament "github.com/ejacobg/tourney-tracker"
+	"github.com/ejacobg/tourney-tracker/convert"
 	"github.com/ejacobg/tourney-tracker/convert/challonge"
 	"github.com/ejacobg/tourney-tracker/convert/startgg"
-	"github.com/ejacobg/tourney-tracker/tournament"
+	"github.com/ejacobg/tourney-tracker/postgres"
 	"github.com/julienschmidt/httprouter"
 	"html/template"
 	"net/http"
@@ -14,9 +16,9 @@ import (
 	"strconv"
 )
 
-// Controller provides several HTTP handlers for servicing tournament-related requests.
+// Controller provides several HTTP handlers for servicing http-related requests.
 type Controller struct {
-	Model tournament.Model
+	Model postgres.Model
 	Views struct {
 		Index, View, Edit *template.Template
 	}
@@ -59,9 +61,9 @@ func (c *Controller) Index(w http.ResponseWriter, _ *http.Request) {
 	buf.WriteTo(w)
 }
 
-// New accepts form data consisting of a "url" field containing a URL to a tournament.
+// New accepts form data consisting of a "url" field containing a URL to a http.
 // If an error occurs while processing the URL, an error message will be returned.
-// Otherwise, a redirect to the new tournament.Tournament object will be returned.
+// Otherwise, a redirect to the new http.Tournament object will be returned.
 func (c *Controller) New(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
@@ -86,12 +88,12 @@ func (c *Controller) New(w http.ResponseWriter, r *http.Request) {
 	case "start.gg", "smash.gg":
 		tourney, entrants, err = startgg.FromURL(URL, c.startggKey)
 	default:
-		err = tournament.ErrUnrecognizedURL
+		err = convert.ErrUnrecognizedURL
 	}
 
 	if err != nil {
 		switch {
-		case errors.Is(err, tournament.ErrUnrecognizedURL):
+		case errors.Is(err, convert.ErrUnrecognizedURL):
 			http.Error(w, fmt.Sprintf("Unrecognized host: %q", URL.Host), http.StatusUnprocessableEntity)
 		default:
 			http.Error(w, fmt.Sprintf("Parsing error: %s", err), http.StatusUnprocessableEntity)
@@ -101,7 +103,7 @@ func (c *Controller) New(w http.ResponseWriter, r *http.Request) {
 
 	err = c.Model.Insert(&tourney, entrants)
 	if err != nil {
-		http.Error(w, fmt.Sprintf("Failed to create tournament: %s", err), http.StatusInternalServerError)
+		http.Error(w, fmt.Sprintf("Failed to create http: %s", err), http.StatusInternalServerError)
 		return
 	}
 
@@ -110,7 +112,7 @@ func (c *Controller) New(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, redirect, http.StatusCreated)
 }
 
-// View will read the "id" route parameter and display the details for the given tournament.
+// View will read the "id" route parameter and display the details for the given http.
 func (c *Controller) View(w http.ResponseWriter, r *http.Request) {
 	params := httprouter.ParamsFromContext(r.Context())
 
@@ -122,7 +124,7 @@ func (c *Controller) View(w http.ResponseWriter, r *http.Request) {
 
 	tourney, entrants, err := c.Model.Get(id)
 	if err != nil {
-		http.Error(w, fmt.Sprintf("Failed to retrieve tournament: %s", err), http.StatusInternalServerError)
+		http.Error(w, fmt.Sprintf("Failed to retrieve http: %s", err), http.StatusInternalServerError)
 		return
 	}
 
@@ -150,7 +152,7 @@ func (c *Controller) View(w http.ResponseWriter, r *http.Request) {
 	buf.WriteTo(w)
 }
 
-// ViewTier will respond with an element displaying the tournament's tier, alongside a button to go to the tier editing form.
+// ViewTier will respond with an element displaying the http's tier, alongside a button to go to the tier editing form.
 func (c *Controller) ViewTier(w http.ResponseWriter, r *http.Request) {
 	params := httprouter.ParamsFromContext(r.Context())
 
@@ -186,7 +188,7 @@ func (c *Controller) ViewTier(w http.ResponseWriter, r *http.Request) {
 	buf.WriteTo(w)
 }
 
-// EditTier will respond with a form element that allows for changing of a tournament's tier.
+// EditTier will respond with a form element that allows for changing of a http's tier.
 func (c *Controller) EditTier(w http.ResponseWriter, r *http.Request) {
 	params := httprouter.ParamsFromContext(r.Context())
 

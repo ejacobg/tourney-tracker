@@ -1,7 +1,7 @@
 package challonge
 
 import (
-	"github.com/ejacobg/tourney-tracker/tournament"
+	"github.com/ejacobg/tourney-tracker/convert"
 	"golang.org/x/exp/slices"
 	"net/http"
 	"net/http/httptest"
@@ -29,12 +29,12 @@ func Test_response(t *testing.T) {
 		tournamentName string
 		tournamentURL  string
 		bracketReset   bool
-		placements     []int
+		placements     []int64
 		numEntrants    int
 	}{
-		{"no-reset", "(SSC C TIER) Gator Grind #9", "https://challonge.com/kpqlgghc", false, []int{17, 13, 9, 7, 5, 4, 3, 2, 1}, 20},
-		{"reset-no-points", "(SSC C Tier) Gator Grind #12", "https://challonge.com/8ozc6ffz", false, []int{17, 13, 9, 7, 5, 4, 3, 2, 1}, 20},
-		{"reset-with-points", "(SSC C Tier) Gator Grind #7", "https://challonge.com/t4kq4f5b", true, []int{17, 13, 9, 7, 5, 4, 3, 2, 1}, 24},
+		{"no-reset", "(SSC C TIER) Gator Grind #9", "https://challonge.com/kpqlgghc", false, []int64{17, 13, 9, 7, 5, 4, 3, 2, 1}, 20},
+		{"reset-no-points", "(SSC C Tier) Gator Grind #12", "https://challonge.com/8ozc6ffz", false, []int64{17, 13, 9, 7, 5, 4, 3, 2, 1}, 20},
+		{"reset-with-points", "(SSC C Tier) Gator Grind #7", "https://challonge.com/t4kq4f5b", true, []int64{17, 13, 9, 7, 5, 4, 3, 2, 1}, 24},
 	}
 
 	// Attach our routes to the DefaultServeMux.
@@ -50,9 +50,9 @@ func Test_response(t *testing.T) {
 				t.Error("failed to create request:", err)
 				return
 			}
-			res, err := tournament.Get[response](req)
+			res, err := convert.Get[response](req)
 			if err != nil {
-				t.Error("failed to get tournament:", err)
+				t.Error("failed to get http:", err)
 				return
 			}
 			tourney := res.tournament()

@@ -1,7 +1,7 @@
 package startgg
 
 import (
-	"github.com/ejacobg/tourney-tracker/tournament"
+	"github.com/ejacobg/tourney-tracker/convert"
 	"golang.org/x/exp/slices"
 	"net/http"
 	"net/http/httptest"
@@ -29,12 +29,12 @@ func Test_response(t *testing.T) {
 		tournamentName string
 		tournamentURL  string
 		bracketReset   bool
-		placements     []int
+		placements     []int64
 		numEntrants    int
 	}{
-		{"no-reset", "Silver State Smash x Pirate Hackers Black Lives Matter Charity Tournament - Singles 1v1", "https://start.gg/tournament/silver-state-smash-x-pirate-hackers-black-lives-matter-charity/event/singles-1v1", false, []int{33, 25, 17, 13, 9, 7, 5, 4, 3, 2, 1}, 42},
-		{"reset-no-points", "Wrangler Rumble #1 - Ultimate Singles", "https://start.gg/tournament/wrangler-rumble-1/event/ultimate-singles", false, []int{13, 9, 7, 5, 4, 3, 2, 1}, 13},
-		{"reset-with-points", "Shinto Series: Smash #1 - Singles 1v1", "https://start.gg/tournament/shinto-series-smash-1/event/singles-1v1", true, []int{97, 65, 49, 33, 25, 17, 13, 9, 7, 5, 4, 3, 2, 1}, 128},
+		{"no-reset", "Silver State Smash x Pirate Hackers Black Lives Matter Charity Tournament - Singles 1v1", "https://start.gg/tournament/silver-state-smash-x-pirate-hackers-black-lives-matter-charity/event/singles-1v1", false, []int64{33, 25, 17, 13, 9, 7, 5, 4, 3, 2, 1}, 42},
+		{"reset-no-points", "Wrangler Rumble #1 - Ultimate Singles", "https://start.gg/tournament/wrangler-rumble-1/event/ultimate-singles", false, []int64{13, 9, 7, 5, 4, 3, 2, 1}, 13},
+		{"reset-with-points", "Shinto Series: Smash #1 - Singles 1v1", "https://start.gg/tournament/shinto-series-smash-1/event/singles-1v1", true, []int64{97, 65, 49, 33, 25, 17, 13, 9, 7, 5, 4, 3, 2, 1}, 128},
 	}
 
 	// Attach our routes to the DefaultServeMux.
@@ -50,9 +50,9 @@ func Test_response(t *testing.T) {
 				t.Error("failed to create request:", err)
 				return
 			}
-			res, err := tournament.Get[response](req)
+			res, err := convert.Get[response](req)
 			if err != nil {
-				t.Error("failed to get tournament:", err)
+				t.Error("failed to get http:", err)
 				return
 			}
 			tourney := res.tournament()

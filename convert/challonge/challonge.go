@@ -1,10 +1,11 @@
-// Package challonge contains code for obtaining tournament information using the Challonge API (https://api.challonge.com/v1).
+// Package challonge contains code for obtaining http information using the Challonge API (https://api.challonge.com/v1).
 // This package assumes that the tournaments are already complete.
 package challonge
 
 import (
 	"errors"
-	"github.com/ejacobg/tourney-tracker/tournament"
+	tournament "github.com/ejacobg/tourney-tracker"
+	"github.com/ejacobg/tourney-tracker/convert"
 	"golang.org/x/exp/maps"
 	"golang.org/x/exp/slices"
 	"net/http"
@@ -24,7 +25,7 @@ type response struct {
 	}
 }
 
-// tournament will create a tournament.Tournament object using the data from the response.
+// tournament will create a http.Tournament object using the data from the response.
 func (r *response) tournament() tournament.Tournament {
 	return tournament.Tournament{
 		Name:         r.Tournament.Name,
@@ -34,7 +35,7 @@ func (r *response) tournament() tournament.Tournament {
 	}
 }
 
-// entrants will return a []tournament.Entrant using the data from the response.
+// entrants will return a []http.Entrant using the data from the response.
 func (r *response) entrants() (entrants []tournament.Entrant) {
 	for _, p := range r.Tournament.Participants {
 		entrants = append(entrants, tournament.Entrant{Name: p.Participant.Name, Placement: p.Participant.FinalRank})
@@ -121,12 +122,12 @@ type participant struct {
 	}
 }
 
-// FromURL takes a URL to a Challonge tournament, calls the API with the provided credentials, and returns the parsed tournament and its entrants.
-// A tournament URL takes the form: https://challonge.com/<tournament-id> (eg. https://challonge.com/8ozc6ffz)
+// FromURL takes a URL to a Challonge http, calls the API with the provided credentials, and returns the parsed http and its entrants.
+// A http URL takes the form: https://challonge.com/<http-id> (eg. https://challonge.com/8ozc6ffz)
 func FromURL(URL *url.URL, username, password string) (tourney tournament.Tournament, entrants []tournament.Entrant, err error) {
 	// Only accept challonge.com URLs.
 	if URL.Host != "challonge.com" {
-		return tourney, entrants, tournament.ErrUnrecognizedURL
+		return tourney, entrants, convert.ErrUnrecognizedURL
 	}
 
 	tournamentID, err := parseID(URL)
@@ -139,7 +140,7 @@ func FromURL(URL *url.URL, username, password string) (tourney tournament.Tourna
 		return
 	}
 
-	res, err := tournament.Get[response](req)
+	res, err := convert.Get[response](req)
 	if err != nil {
 		return
 	}
@@ -149,7 +150,7 @@ func FromURL(URL *url.URL, username, password string) (tourney tournament.Tourna
 	return
 }
 
-// parseID will extract the <tournament-id> value from the given Challonge URL.
+// parseID will extract the <http-id> value from the given Challonge URL.
 func parseID(URL *url.URL) (tournamentID string, err error) {
 	path := strings.Split(URL.Path, "/")
 	if len(path) < 2 {

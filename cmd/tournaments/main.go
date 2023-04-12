@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"flag"
 	"fmt"
-	"github.com/ejacobg/tourney-tracker/tournament"
-	"github.com/ejacobg/tourney-tracker/tournament/controller"
+	controller "github.com/ejacobg/tourney-tracker/http"
+	"github.com/ejacobg/tourney-tracker/postgres"
 	"github.com/julienschmidt/httprouter"
 	"html/template"
 	"log"
@@ -42,7 +42,7 @@ func main() {
 	}
 
 	ctlr := controller.New(*challongeUsername, *challongePassword, *startggKey)
-	ctlr.Model = tournament.Model{db}
+	ctlr.Model = postgres.Model{db}
 	ctlr.Views.Index = index
 	ctlr.Views.View = view
 	ctlr.Views.Edit = edit

@@ -1,8 +1,9 @@
-package tournament
+package postgres
 
 import (
 	"database/sql"
 	"errors"
+	tournament "github.com/ejacobg/tourney-tracker"
 	"github.com/lib/pq"
 )
 
@@ -13,14 +14,7 @@ type Model struct {
 	DB *sql.DB
 }
 
-// Preview represents a subset of a Tournament object, namely its ID, name, and tier.
-type Preview struct {
-	ID         int64
-	Tournament string
-	Tier       string
-}
-
-func (m Model) GetPreviews() (previews []Preview, err error) {
+func (m Model) GetPreviews() (previews []tournament.Preview, err error) {
 	query := `
 SELECT tournaments.id, tournaments.name, tiers.name
 FROM tournaments
@@ -33,7 +27,7 @@ INNER JOIN tiers on tiers.id = tournaments.tier_id`
 	defer rows.Close()
 
 	for rows.Next() {
-		var preview Preview
+		var preview tournament.Preview
 
 		err = rows.Scan(&preview.ID, &preview.Tournament, &preview.Tier)
 		if err != nil {
@@ -46,7 +40,7 @@ INNER JOIN tiers on tiers.id = tournaments.tier_id`
 	return previews, rows.Err()
 }
 
-func (m Model) Insert(tourney *Tournament, entrants []Entrant) error {
+func (m Model) Insert(tourney *tournament.Tournament, entrants []tournament.Entrant) error {
 	tx, err := m.DB.Begin()
 	if err != nil {
 		return err
@@ -86,7 +80,7 @@ RETURNING id;`
 	return tx.Commit()
 }
 
-func (m Model) Get(id int64) (tourney Tournament, entrants []Entrant, err error) {
+func (m Model) Get(id int64) (tourney tournament.Tournament, entrants []tournament.Entrant, err error) {
 	if id < 1 {
 		return tourney, entrants, ErrRecordNotFound
 	}
@@ -125,7 +119,7 @@ WHERE tournament_id = $1;`
 	}
 
 	for rows.Next() {
-		var entrant Entrant
+		var entrant tournament.Entrant
 
 		err = rows.Scan(
 			&entrant.ID,
@@ -145,7 +139,7 @@ WHERE tournament_id = $1;`
 	return tourney, entrants, rows.Err()
 }
 
-func (m Model) GetTiers() (tiers []Tier, err error) {
+func (m Model) GetTiers() (tiers []tournament.Tier, err error) {
 	query := `
 SELECT id, name, multiplier
 FROM tiers;`
@@ -156,7 +150,7 @@ FROM tiers;`
 	}
 
 	for rows.Next() {
-		var tier Tier
+		var tier tournament.Tier
 
 		err = rows.Scan(&tier.ID, &tier.Name, &tier.Multiplier)
 		if err != nil {
@@ -169,7 +163,7 @@ FROM tiers;`
 	return tiers, rows.Err()
 }
 
-func (m Model) GetTier(tournamentID int64) (tier Tier, err error) {
+func (m Model) GetTier(tournamentID int64) (tier tournament.Tier, err error) {
 	query := `
 SELECT tiers.id, tiers.name, multiplier
 FROM tournaments
