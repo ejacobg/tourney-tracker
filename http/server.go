@@ -51,7 +51,7 @@ func NewServer(challongeUsername, challongePassword, startggKey string) *Server 
 func (s *Server) Render(w http.ResponseWriter, status int, tmpl, name string, data any) {
 	t, ok := s.Templates[tmpl]
 	if !ok {
-		ServerError(w, fmt.Errorf("the template %q does not exist", tmpl))
+		ServerErrorResponse(w, fmt.Sprintf("The template %q does not exist.", tmpl))
 		return
 	}
 
@@ -59,7 +59,7 @@ func (s *Server) Render(w http.ResponseWriter, status int, tmpl, name string, da
 
 	err := t.ExecuteTemplate(buf, name, data)
 	if err != nil {
-		ServerError(w, fmt.Errorf("failed to render template: %s", err))
+		ServerErrorResponse(w, fmt.Sprintf("Failed to render template: %s", err))
 		return
 	}
 

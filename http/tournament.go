@@ -14,37 +14,38 @@ import (
 )
 
 func (s *Server) registerTournamentRoutes() {
-	s.router.HandlerFunc("GET", "/", s.Index)
-	s.router.HandlerFunc("POST", "/tournaments/new", s.New)
-	s.router.HandlerFunc("GET", "/tournaments/:id", s.View)
-	s.router.HandlerFunc("GET", "/tournaments/:id/tier", s.ViewTier)
-	s.router.HandlerFunc("GET", "/tournaments/:id/tier/edit", s.EditTier)
+	s.router.HandlerFunc(http.MethodGet, "/tournaments", s.getTournaments)
+	s.router.HandlerFunc(http.MethodPost, "/tournaments/new", s.postTournamentURL)
+	s.router.HandlerFunc(http.MethodGet, "/tournaments/:id", s.getTournament)
+	s.router.HandlerFunc(http.MethodGet, "/tournaments/:id/tier", s.getTournamentTier)
+	s.router.HandlerFunc(http.MethodGet, "/tournaments/:id/tier/edit", s.getTournamentTierForm)
+	s.router.HandlerFunc(http.MethodPut, "/tournaments/:id/tier", s.putTournamentTier)
 }
 
-// Index renders a table of all saved tournaments, as well as a form for adding a new one.
-func (s *Server) Index(w http.ResponseWriter, _ *http.Request) {
+// getTournaments renders a table of all saved tournaments, as well as a form for adding a new one.
+func (s *Server) getTournaments(w http.ResponseWriter, _ *http.Request) {
 	previews, err := s.TournamentService.GetPreviews()
 	if err != nil {
-		ServerError(w, fmt.Errorf("failed to retrieve previews"))
+		ServerErrorResponse(w, "Failed to retrieve previews.")
 		return
 	}
 
 	s.Render(w, 200, "tournaments/index.go.html", "base", previews)
 }
 
-// NewServer accepts form data consisting of a "url" field containing a URL to a http.
+// postTournamentURL accepts form data consisting of a "url" field containing a URL to a tournament.
 // If an error occurs while processing the URL, an error message will be returned.
 // Otherwise, a redirect to the new http.Tournament object will be returned.
-func (s *Server) New(w http.ResponseWriter, r *http.Request) {
+func (s *Server) postTournamentURL(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
-		http.Error(w, "Failed to parse form.", http.StatusBadRequest)
+		BadRequestResponse(w, "Failed to parse form.")
 		return
 	}
 
 	URL, err := url.Parse(r.PostForm.Get("url"))
 	if err != nil {
-		http.Error(w, "Failed to parse URL.", http.StatusUnprocessableEntity)
+		UnprocessableEntityResponse(w, "Failed to parse URL.")
 		return
 	}
 
@@ -65,16 +66,16 @@ func (s *Server) New(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		switch {
 		case errors.Is(err, convert.ErrUnrecognizedURL):
-			http.Error(w, fmt.Sprintf("Unrecognized host: %q", URL.Host), http.StatusUnprocessableEntity)
+			UnprocessableEntityResponse(w, fmt.Sprintf("Unrecognized host: %q", URL.Host))
 		default:
-			http.Error(w, fmt.Sprintf("Parsing error: %s", err), http.StatusUnprocessableEntity)
+			UnprocessableEntityResponse(w, fmt.Sprintf("Parsing error: %s", err))
 		}
 		return
 	}
 
 	err = s.TournamentService.CreateTournament(&tourney, entrants)
 	if err != nil {
-		http.Error(w, fmt.Sprintf("Failed to create http: %s", err), http.StatusInternalServerError)
+		ServerErrorResponse(w, fmt.Sprintf("Failed to create tournament: %s", err))
 		return
 	}
 
@@ -83,8 +84,8 @@ func (s *Server) New(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, redirect, http.StatusCreated)
 }
 
-// View will read the "id" route parameter and display the details for the given http.
-func (s *Server) View(w http.ResponseWriter, r *http.Request) {
+// getTournament will read the "id" route parameter and display the details for the given tournament.
+func (s *Server) getTournament(w http.ResponseWriter, r *http.Request) {
 	params := httprouter.ParamsFromContext(r.Context())
 
 	id, err := strconv.ParseInt(params.ByName("id"), 10, 64)
@@ -95,13 +96,13 @@ func (s *Server) View(w http.ResponseWriter, r *http.Request) {
 
 	tourney, err := s.TournamentService.GetTournament(id)
 	if err != nil {
-		http.Error(w, fmt.Sprintf("Failed to retrieve tournament: %s", err), http.StatusInternalServerError)
+		ServerErrorResponse(w, fmt.Sprintf("Failed to retrieve tournament: %s", err))
 		return
 	}
 
 	entrants, err := s.EntrantService.GetEntrants(id)
 	if err != nil {
-		http.Error(w, fmt.Sprintf("Failed to retrieve entrants: %s", err), http.StatusInternalServerError)
+		ServerErrorResponse(w, fmt.Sprintf("Failed to retrieve entrants: %s", err))
 		return
 	}
 
@@ -114,8 +115,8 @@ func (s *Server) View(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// ViewTier will respond with an element displaying the http's tier, alongside a button to go to the tier editing form.
-func (s *Server) ViewTier(w http.ResponseWriter, r *http.Request) {
+// getTournamentTier will respond with an element displaying the Tournament's Tier, alongside a button to go to the Tier editing form.
+func (s *Server) getTournamentTier(w http.ResponseWriter, r *http.Request) {
 	params := httprouter.ParamsFromContext(r.Context())
 
 	id, err := strconv.ParseInt(params.ByName("id"), 10, 64)
@@ -126,7 +127,7 @@ func (s *Server) ViewTier(w http.ResponseWriter, r *http.Request) {
 
 	tier, err := s.TierService.GetTournamentTier(id)
 	if err != nil {
-		http.Error(w, fmt.Sprintf("Failed to get tier: %s", err), http.StatusInternalServerError)
+		ServerErrorResponse(w, fmt.Sprintf("Failed to get tier: %s", err))
 		return
 	}
 
@@ -136,8 +137,8 @@ func (s *Server) ViewTier(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// EditTier will respond with a form element that allows for changing of a http's tier.
-func (s *Server) EditTier(w http.ResponseWriter, r *http.Request) {
+// getTournamentTierForm will respond with a form element that allows for changing of a Tournament's Tier.
+func (s *Server) getTournamentTierForm(w http.ResponseWriter, r *http.Request) {
 	params := httprouter.ParamsFromContext(r.Context())
 
 	id, err := strconv.ParseInt(params.ByName("id"), 10, 64)
@@ -148,7 +149,7 @@ func (s *Server) EditTier(w http.ResponseWriter, r *http.Request) {
 
 	tiers, err := s.TierService.GetTiers()
 	if err != nil {
-		http.Error(w, fmt.Sprintf("Failed to get tiers: %s", err), http.StatusInternalServerError)
+		ServerErrorResponse(w, fmt.Sprintf("Failed to get tiers: %s", err))
 		return
 	}
 
@@ -156,4 +157,41 @@ func (s *Server) EditTier(w http.ResponseWriter, r *http.Request) {
 		"TournamentID": id,
 		"Tiers":        tiers,
 	})
+}
+
+// putTournamentTier accepts form data consisting of a "tier" field containing the value of the new Tier.
+// The new Tier will then be applied to the Tournament, and a refresh of the Tournament page will be returned.
+func (s *Server) putTournamentTier(w http.ResponseWriter, r *http.Request) {
+	// Get Tournament ID.
+	params := httprouter.ParamsFromContext(r.Context())
+
+	tournamentID, err := strconv.ParseInt(params.ByName("id"), 10, 64)
+	if err != nil || tournamentID < 1 {
+		http.NotFound(w, r)
+		return
+	}
+
+	// Get Tier ID.
+	err = r.ParseForm()
+	if err != nil {
+		BadRequestResponse(w, "Failed to parse form.")
+		return
+	}
+
+	tierID, err := strconv.ParseInt(r.PostForm.Get("tier"), 10, 64)
+	if err != nil {
+		UnprocessableEntityResponse(w, fmt.Sprintf("Tier ID invalid or does not exist."))
+		return
+	}
+
+	// Apply new Tier to Tournament.
+	err = s.TournamentService.SetTier(tournamentID, tierID)
+	if err != nil {
+		ServerErrorResponse(w, fmt.Sprintf("Failed to update tier: %s", err))
+		return
+	}
+
+	// Refresh the page.
+	w.Header()["HX-Refresh"] = []string{"true"}
+	w.WriteHeader(http.StatusOK)
 }
