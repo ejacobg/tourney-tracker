@@ -12,11 +12,17 @@ type TierService interface {
 	// GetTiers returns all tiers.
 	GetTiers() ([]Tier, error)
 
+	// GetTier returns a single Tier by ID.
+	GetTier(id int64) (Tier, error)
+
+	// CreateTier adds the given Tier to the database.
+	CreateTier(tier *Tier) error
+
 	// UpdateTier updates the given Tier.
 	UpdateTier(tier *Tier) error
 
 	// DeleteTier deletes the given Tier.
-	// Note that deleting a tier that still has tournaments attached to it will fail.
-	// It is up to the user to ensure that all tournaments update their tier before attempting to delete.
+	// Note that deleting a tier that still has tournaments attached to it should fail.
+	// It is up to the user to ensure that all tournaments update their Tier before attempting to delete.
 	DeleteTier(id int64) error
 }

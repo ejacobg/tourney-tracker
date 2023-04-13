@@ -8,12 +8,15 @@ type Tournament struct {
 	ID   int64  `json:"id"`
 	Name string `json:"name"`
 	URL  string `json:"url"`
+
 	// BracketReset is true if any bracket reset points should be applied to the second-place entrant.
 	BracketReset bool `json:"bracketReset"`
+
 	// Placements contains the unique placements of a http, in reverse-sorted order.
 	// For example, if the final standings for an 8-man http are [7, 7, 5, 5, 4, 3, 2, 1], then the unique placements are [7, 5, 4, 3, 2, 1].
 	Placements []int64 `json:"placements"` // Can't scan into the normal int type, use int64 or sql.NullInt64. (https://stackoverflow.com/questions/47962615/query-for-an-integer-array-from-postresql-always-returns-uint8)
-	Tier       Tier
+
+	Tier Tier
 }
 
 // TournamentService represents a service for managing tournaments.
@@ -27,21 +30,24 @@ type TournamentService interface {
 	// GetTournament returns a single Tournament by ID.
 	GetTournament(id int64) (Tournament, error)
 
-	// UpdateTier will update the Tier of the given Tournament.
-	UpdateTier(tournamentID, tierID int64) error
+	// CreateTournament adds the given Tournament to the database.
+	CreateTournament(tourney *Tournament) error
 
-	// DeleteTournament deletes a Tournament and its associated entrants.
+	// SetTier updates the Tier of the given Tournament.
+	SetTier(tournamentID, tierID int64) error
+
+	// DeleteTournament deletes a Tournament.
 	DeleteTournament(id int64) error
 }
 
-// Preview represents a subset of a Tournament object, namely its ID, name, and tier.
+// Preview represents a subset of a Tournament object, namely its ID, name, and Tier.
 type Preview struct {
 	ID         int64
 	Tournament string
 	Tier       string
 }
 
-// Name represents a unique tournament name.
+// Name represents a unique Tournament name.
 type Name struct {
 	ID   int64
 	Name string
