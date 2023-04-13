@@ -30,8 +30,9 @@ type TournamentService interface {
 	// GetTournament returns a single Tournament by ID.
 	GetTournament(id int64) (Tournament, error)
 
-	// CreateTournament adds the given Tournament to the database.
-	CreateTournament(tourney *Tournament) error
+	// CreateTournament adds the given Tournament and its entrants to the database.
+	// The Tournament and entrants should be created in the same transaction.
+	CreateTournament(tourney *Tournament, entrants []Entrant) error
 
 	// SetTier updates the Tier of the given Tournament.
 	SetTier(tournamentID, tierID int64) error
@@ -42,9 +43,9 @@ type TournamentService interface {
 
 // Preview represents a subset of a Tournament object, namely its ID, name, and Tier.
 type Preview struct {
-	ID         int64
-	Tournament string
-	Tier       string
+	ID   int64
+	Name string
+	Tier string
 }
 
 // Name represents a unique Tournament name.
