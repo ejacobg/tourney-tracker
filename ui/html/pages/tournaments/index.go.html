@@ -4,7 +4,7 @@
   Data:
     .:                  []Preview
     Preview.ID:         int64
-    Preview.Tournament: string
+    Preview.Name: string
     Preview.Tier:       string
 
   Previews are subsets of Tournament objects.
@@ -36,7 +36,7 @@
         <tbody>
         {{range .}}
             <tr>
-                <td><a href="/tournaments/{{.ID}}">{{.Tournament}}</a></td>
+                <td><a href="/tournaments/{{.ID}}">{{.Name}}</a></td>
                 <td>{{.Tier}}</td>
                 <td><a href="/tournaments/{{.ID}}/edit">Edit</a></td>
                 <td><a href="https://htmx.org/examples/delete-row/">Delete</a></td>

@@ -51,6 +51,16 @@ WHERE id = $1`
 	return
 }
 
+func (ts TierService) GetTournamentTier(tournamentID int64) (tier tournament.Tier, _ error) {
+	query := `
+SELECT tiers.id, tiers.name, multiplier
+FROM tournaments
+INNER JOIN tiers on tournaments.tier_id = tiers.id
+WHERE tournaments.id = $1;`
+
+	return tier, ts.DB.QueryRow(query, tournamentID).Scan(&tier.ID, &tier.Name, &tier.Multiplier)
+}
+
 func (ts TierService) CreateTier(tier *tournament.Tier) error {
 	query := `
 INSERT INTO tiers (name, multiplier)

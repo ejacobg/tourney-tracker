@@ -8,7 +8,6 @@ import (
 	"github.com/ejacobg/tourney-tracker/convert"
 	"github.com/ejacobg/tourney-tracker/convert/challonge"
 	"github.com/ejacobg/tourney-tracker/convert/startgg"
-	"github.com/ejacobg/tourney-tracker/postgres"
 	"github.com/julienschmidt/httprouter"
 	"html/template"
 	"net/http"
@@ -18,8 +17,10 @@ import (
 
 // Controller provides several HTTP handlers for servicing http-related requests.
 type Controller struct {
-	Model postgres.Model
-	Views struct {
+	EntrantService    tournament.EntrantService
+	TierService       tournament.TierService
+	TournamentService tournament.TournamentService
+	Views             struct {
 		Index, View, Edit *template.Template
 	}
 	// Credentials needed for API calls.
@@ -38,7 +39,7 @@ func New(challongeUsername, challongePassword, startggKey string) *Controller {
 
 // Index renders a table of all saved tournaments, as well as a form for adding a new one.
 func (c *Controller) Index(w http.ResponseWriter, _ *http.Request) {
-	previews, err := c.Model.GetPreviews()
+	previews, err := c.TournamentService.GetPreviews()
 	if err != nil {
 		http.Error(w, "Failed to retrieve previews.", http.StatusInternalServerError)
 		return
@@ -101,7 +102,7 @@ func (c *Controller) New(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = c.Model.Insert(&tourney, entrants)
+	err = c.TournamentService.CreateTournament(&tourney, entrants)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Failed to create http: %s", err), http.StatusInternalServerError)
 		return
@@ -122,9 +123,15 @@ func (c *Controller) View(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tourney, entrants, err := c.Model.Get(id)
+	tourney, err := c.TournamentService.GetTournament(id)
 	if err != nil {
-		http.Error(w, fmt.Sprintf("Failed to retrieve http: %s", err), http.StatusInternalServerError)
+		http.Error(w, fmt.Sprintf("Failed to retrieve tournament: %s", err), http.StatusInternalServerError)
+		return
+	}
+
+	entrants, err := c.EntrantService.GetEntrants(id)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Failed to retrieve entrants: %s", err), http.StatusInternalServerError)
 		return
 	}
 
@@ -162,9 +169,10 @@ func (c *Controller) ViewTier(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tier, err := c.Model.GetTier(id)
+	tier, err := c.TierService.GetTournamentTier(id)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Failed to get tier: %s", err), http.StatusInternalServerError)
+		return
 	}
 
 	if c.Views.View == nil {
@@ -198,7 +206,7 @@ func (c *Controller) EditTier(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tiers, err := c.Model.GetTiers()
+	tiers, err := c.TierService.GetTiers()
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Failed to get tiers: %s", err), http.StatusInternalServerError)
 		return

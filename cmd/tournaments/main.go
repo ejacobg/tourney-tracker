@@ -42,7 +42,9 @@ func main() {
 	}
 
 	ctlr := controller.New(*challongeUsername, *challongePassword, *startggKey)
-	ctlr.Model = postgres.Model{db}
+	ctlr.EntrantService = postgres.EntrantService{db}
+	ctlr.TierService = postgres.TierService{db}
+	ctlr.TournamentService = postgres.TournamentService{db}
 	ctlr.Views.Index = index
 	ctlr.Views.View = view
 	ctlr.Views.Edit = edit

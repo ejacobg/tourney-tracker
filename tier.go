@@ -15,6 +15,9 @@ type TierService interface {
 	// GetTier returns a single Tier by ID.
 	GetTier(id int64) (Tier, error)
 
+	// GetTournamentTier returns the Tier for the given Tournament.
+	GetTournamentTier(tournamentID int64) (Tier, error)
+
 	// CreateTier adds the given Tier to the database.
 	CreateTier(tier *Tier) error
 

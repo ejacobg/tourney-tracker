@@ -20,6 +20,11 @@ SELECT id, name, multiplier
 FROM tiers
 WHERE id = 1;
 
+-- This query is used by postgres.TierService.GetTournamentTier().
+SELECT tiers.id, tiers.name, tiers.multiplier
+FROM tournaments
+INNER JOIN tiers t on tournaments.tier_id = t.id
+WHERE
 -- This query is used by postgres.TierService.CreateTier().
 INSERT INTO tiers (name, multiplier)
 VALUES ('Z', 1)
