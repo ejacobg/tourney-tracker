@@ -135,6 +135,8 @@ WHERE id = $1`
 }
 
 func createTournament(tx *sql.Tx, tourney *tournament.Tournament) error {
+	// Hard-coding the tier ID. Right now, I'm assuming that the C-tier ID will always exist.
+	// A better solution might be to have the Tournament's Tier ID be a valid value.
 	query := `
 WITH tourney AS (
     INSERT INTO tournaments (name, url, bracket_reset, placements, tier_id)

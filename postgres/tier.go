@@ -56,7 +56,7 @@ func (ts TierService) GetTournamentTier(tournamentID int64) (tier tournament.Tie
 SELECT tiers.id, tiers.name, multiplier
 FROM tournaments
 INNER JOIN tiers on tournaments.tier_id = tiers.id
-WHERE tournaments.id = $1;`
+WHERE tournaments.id = $1`
 
 	return tier, ts.DB.QueryRow(query, tournamentID).Scan(&tier.ID, &tier.Name, &tier.Multiplier)
 }

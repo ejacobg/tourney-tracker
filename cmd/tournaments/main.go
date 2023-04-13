@@ -4,12 +4,12 @@ import (
 	"database/sql"
 	"flag"
 	"fmt"
-	controller "github.com/ejacobg/tourney-tracker/http"
+	"github.com/ejacobg/tourney-tracker/http"
 	"github.com/ejacobg/tourney-tracker/postgres"
-	"github.com/julienschmidt/httprouter"
 	"html/template"
 	"log"
-	"net/http"
+	"path/filepath"
+	"strings"
 
 	_ "github.com/lib/pq"
 )
@@ -21,17 +21,7 @@ func main() {
 	startggKey := flag.String("startgg-key", "", "start.gg API Key")
 	flag.Parse()
 
-	index, err := template.New("index").ParseFiles("ui/html/base.go.html", "ui/html/partials/nav.go.html", "ui/html/pages/tournaments/index.go.html")
-	if err != nil {
-		log.Fatalln("Failed to create template:", err)
-	}
-
-	view, err := template.New("view").ParseFiles("ui/html/base.go.html", "ui/html/partials/nav.go.html", "ui/html/pages/tournaments/view.go.html")
-	if err != nil {
-		log.Fatalln("Failed to create template:", err)
-	}
-
-	edit, err := template.New("edit").ParseFiles("ui/html/pages/tournaments/edit.go.html")
+	tc, err := newTemplateCache()
 	if err != nil {
 		log.Fatalln("Failed to create template:", err)
 	}
@@ -41,24 +31,16 @@ func main() {
 		log.Fatalln("Failed to connect to database:", err)
 	}
 
-	ctlr := controller.New(*challongeUsername, *challongePassword, *startggKey)
-	ctlr.EntrantService = postgres.EntrantService{db}
-	ctlr.TierService = postgres.TierService{db}
-	ctlr.TournamentService = postgres.TournamentService{db}
-	ctlr.Views.Index = index
-	ctlr.Views.View = view
-	ctlr.Views.Edit = edit
-
-	router := httprouter.New()
-	router.HandlerFunc("GET", "/", ctlr.Index)
-	router.HandlerFunc("POST", "/tournaments/new", ctlr.New)
-	router.HandlerFunc("GET", "/tournaments/:id", ctlr.View)
-	router.HandlerFunc("GET", "/tournaments/:id/tier", ctlr.ViewTier)
-	router.HandlerFunc("GET", "/tournaments/:id/tier/edit", ctlr.EditTier)
-	router.Handler("GET", "/static/*filepath", http.FileServer(http.Dir("ui")))
+	srv := http.NewServer(*challongeUsername, *challongePassword, *startggKey)
+	srv.Addr = ":4000"
+	srv.Templates = tc
+	srv.EntrantService = postgres.EntrantService{db}
+	srv.PlayerService = postgres.PlayerService{db}
+	srv.TierService = postgres.TierService{db}
+	srv.TournamentService = postgres.TournamentService{db}
 
 	fmt.Println("Serving on http://localhost:4000")
-	log.Fatalln(http.ListenAndServe(":4000", router))
+	log.Fatalln(srv.ListenAndServe())
 }
 
 func openDB(dsn string) (*sql.DB, error) {
@@ -70,4 +52,33 @@ func openDB(dsn string) (*sql.DB, error) {
 		return nil, err
 	}
 	return db, nil
+}
+
+func newTemplateCache() (cache map[string]*template.Template, err error) {
+	cache = make(map[string]*template.Template)
+
+	pages, err := filepath.Glob("ui/html/pages/*/*.go.html")
+	if err != nil {
+		return nil, err
+	}
+
+	for _, page := range pages {
+		name := strings.TrimPrefix(filepath.ToSlash(page), "ui/html/pages/")
+		fmt.Println(name)
+
+		files := []string{
+			"ui/html/base.go.html",
+			"ui/html/partials/nav.go.html",
+			page,
+		}
+
+		tmpl, err := template.New(name).ParseFiles(files...)
+		if err != nil {
+			return nil, err
+		}
+
+		cache[name] = tmpl
+	}
+
+	return cache, nil
 }
