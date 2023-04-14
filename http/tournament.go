@@ -7,7 +7,6 @@ import (
 	"github.com/ejacobg/tourney-tracker/convert"
 	"github.com/ejacobg/tourney-tracker/convert/challonge"
 	"github.com/ejacobg/tourney-tracker/convert/startgg"
-	"github.com/julienschmidt/httprouter"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -22,11 +21,11 @@ func (s *Server) registerTournamentRoutes() {
 	s.router.HandlerFunc(http.MethodPut, "/tournaments/:id/tier", s.putTournamentTier)
 }
 
-// getTournaments renders a table of all saved tournaments, as well as a form for adding a new one.
+// getTournaments renders a table of all saved tournaments, as well as a form for adding a new Tournament.
 func (s *Server) getTournaments(w http.ResponseWriter, _ *http.Request) {
 	previews, err := s.TournamentService.GetPreviews()
 	if err != nil {
-		ServerErrorResponse(w, "Failed to retrieve previews.")
+		ServerErrorResponse(w, "Failed to get previews.")
 		return
 	}
 
@@ -35,7 +34,7 @@ func (s *Server) getTournaments(w http.ResponseWriter, _ *http.Request) {
 
 // postTournamentURL accepts form data consisting of a "url" field containing a URL to a tournament.
 // If an error occurs while processing the URL, an error message will be returned.
-// Otherwise, a redirect to the new http.Tournament object will be returned.
+// Otherwise, a redirect to the new Tournament object will be returned.
 func (s *Server) postTournamentURL(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
@@ -86,23 +85,21 @@ func (s *Server) postTournamentURL(w http.ResponseWriter, r *http.Request) {
 
 // getTournament will read the "id" route parameter and display the details for the given tournament.
 func (s *Server) getTournament(w http.ResponseWriter, r *http.Request) {
-	params := httprouter.ParamsFromContext(r.Context())
-
-	id, err := strconv.ParseInt(params.ByName("id"), 10, 64)
-	if err != nil || id < 1 {
+	id, err := readIDParam(r)
+	if err != nil {
 		http.NotFound(w, r)
 		return
 	}
 
 	tourney, err := s.TournamentService.GetTournament(id)
 	if err != nil {
-		ServerErrorResponse(w, fmt.Sprintf("Failed to retrieve tournament: %s", err))
+		ServerErrorResponse(w, fmt.Sprintf("Failed to get tournament: %s", err))
 		return
 	}
 
 	entrants, err := s.EntrantService.GetEntrants(id)
 	if err != nil {
-		ServerErrorResponse(w, fmt.Sprintf("Failed to retrieve entrants: %s", err))
+		ServerErrorResponse(w, fmt.Sprintf("Failed to get entrants: %s", err))
 		return
 	}
 
@@ -117,10 +114,8 @@ func (s *Server) getTournament(w http.ResponseWriter, r *http.Request) {
 
 // getTournamentTier will respond with an element displaying the Tournament's Tier, alongside a button to go to the Tier editing form.
 func (s *Server) getTournamentTier(w http.ResponseWriter, r *http.Request) {
-	params := httprouter.ParamsFromContext(r.Context())
-
-	id, err := strconv.ParseInt(params.ByName("id"), 10, 64)
-	if err != nil || id < 1 {
+	id, err := readIDParam(r)
+	if err != nil {
 		http.NotFound(w, r)
 		return
 	}
@@ -139,10 +134,8 @@ func (s *Server) getTournamentTier(w http.ResponseWriter, r *http.Request) {
 
 // getTournamentTierForm will respond with a form element that allows for changing of a Tournament's Tier.
 func (s *Server) getTournamentTierForm(w http.ResponseWriter, r *http.Request) {
-	params := httprouter.ParamsFromContext(r.Context())
-
-	id, err := strconv.ParseInt(params.ByName("id"), 10, 64)
-	if err != nil || id < 1 {
+	id, err := readIDParam(r)
+	if err != nil {
 		http.NotFound(w, r)
 		return
 	}
@@ -163,10 +156,8 @@ func (s *Server) getTournamentTierForm(w http.ResponseWriter, r *http.Request) {
 // The new Tier will then be applied to the Tournament, and a refresh of the Tournament page will be returned.
 func (s *Server) putTournamentTier(w http.ResponseWriter, r *http.Request) {
 	// Get Tournament ID.
-	params := httprouter.ParamsFromContext(r.Context())
-
-	tournamentID, err := strconv.ParseInt(params.ByName("id"), 10, 64)
-	if err != nil || tournamentID < 1 {
+	tournamentID, err := readIDParam(r)
+	if err != nil {
 		http.NotFound(w, r)
 		return
 	}
@@ -180,7 +171,7 @@ func (s *Server) putTournamentTier(w http.ResponseWriter, r *http.Request) {
 
 	tierID, err := strconv.ParseInt(r.PostForm.Get("tier"), 10, 64)
 	if err != nil {
-		UnprocessableEntityResponse(w, fmt.Sprintf("Tier ID invalid or does not exist."))
+		UnprocessableEntityResponse(w, fmt.Sprintf("Invalid tier ID."))
 		return
 	}
 

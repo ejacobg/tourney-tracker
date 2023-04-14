@@ -1,8 +1,6 @@
 package http
 
 import (
-	"bytes"
-	"fmt"
 	tournament "github.com/ejacobg/tourney-tracker"
 	"github.com/julienschmidt/httprouter"
 	"html/template"
@@ -45,26 +43,6 @@ func NewServer(challongeUsername, challongePassword, startggKey string) *Server 
 	srv.registerTournamentRoutes()
 
 	return &srv
-}
-
-// Render will execute the "name" template of "tmpl", then write it to the response with the given status code.
-func (s *Server) Render(w http.ResponseWriter, status int, tmpl, name string, data any) {
-	t, ok := s.Templates[tmpl]
-	if !ok {
-		ServerErrorResponse(w, fmt.Sprintf("The template %q does not exist.", tmpl))
-		return
-	}
-
-	buf := new(bytes.Buffer)
-
-	err := t.ExecuteTemplate(buf, name, data)
-	if err != nil {
-		ServerErrorResponse(w, fmt.Sprintf("Failed to render template: %s", err))
-		return
-	}
-
-	w.WriteHeader(status)
-	buf.WriteTo(w)
 }
 
 func (s *Server) ListenAndServe() error {
