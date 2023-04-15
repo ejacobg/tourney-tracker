@@ -87,7 +87,7 @@ func (s *Server) postTournamentURL(w http.ResponseWriter, r *http.Request) {
 func (s *Server) getTournament(w http.ResponseWriter, r *http.Request) {
 	id, err := readIDParam(r)
 	if err != nil {
-		http.NotFound(w, r)
+		NotFoundResponse(w, "Invalid tournament ID.")
 		return
 	}
 
@@ -116,7 +116,7 @@ func (s *Server) getTournament(w http.ResponseWriter, r *http.Request) {
 func (s *Server) getTournamentTier(w http.ResponseWriter, r *http.Request) {
 	id, err := readIDParam(r)
 	if err != nil {
-		http.NotFound(w, r)
+		NotFoundResponse(w, "Invalid tournament ID.")
 		return
 	}
 
@@ -136,7 +136,7 @@ func (s *Server) getTournamentTier(w http.ResponseWriter, r *http.Request) {
 func (s *Server) getTournamentTierForm(w http.ResponseWriter, r *http.Request) {
 	id, err := readIDParam(r)
 	if err != nil {
-		http.NotFound(w, r)
+		NotFoundResponse(w, "Invalid tournament ID.")
 		return
 	}
 
@@ -158,7 +158,7 @@ func (s *Server) putTournamentTier(w http.ResponseWriter, r *http.Request) {
 	// Get Tournament ID.
 	tournamentID, err := readIDParam(r)
 	if err != nil {
-		http.NotFound(w, r)
+		NotFoundResponse(w, "Invalid tournament ID.")
 		return
 	}
 
@@ -171,7 +171,7 @@ func (s *Server) putTournamentTier(w http.ResponseWriter, r *http.Request) {
 
 	tierID, err := strconv.ParseInt(r.PostForm.Get("tier"), 10, 64)
 	if err != nil {
-		UnprocessableEntityResponse(w, fmt.Sprintf("Invalid tier ID."))
+		UnprocessableEntityResponse(w, "Invalid tier ID.")
 		return
 	}
 

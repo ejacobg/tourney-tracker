@@ -1,5 +1,5 @@
 {{- /*
-  Renders a text box for adding a new tournament, as well as a table displaying all saved tournaments.
+  Renders a text box for adding a new Tournament, as well as a table displaying all saved tournaments.
 
   Data:
     .:                  []Preview
@@ -14,13 +14,13 @@
 
 {{define "main"}}
     <h2>Viewing Tournaments</h2>
-    <form hx-post="/tournaments/new" hx-target="#response" novalidate>
+    <form hx-post="/tournaments/new" hx-target="#error" novalidate>
         <label>
             Add a tournament: <input type="text" name="url" placeholder="Paste tournament link..."/>
         </label>
-        <button type="submit">Add Tournament</button>
+        <button>Add Tournament</button>
     </form>
-    <div id="response" style="color: red" hx-swap="innerHTML">
+    <div id="error" style="color: red" hx-swap="innerHTML">
         test
         {{- /* If a Tournament could not be created from the submitted link, an HTML response will be sent and rendered here. */ -}}
     </div>

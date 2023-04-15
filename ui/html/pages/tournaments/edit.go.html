@@ -5,12 +5,13 @@
     .TournamentID: int64
     .Tiers:        []Tier
         Represents all the available tiers.
-
 */ -}}
 
 {{define "tier"}}
-    <form hx-put="/tournaments/{{.TournamentID}}/tier" hx-target="this" hx-swap="outerHTML">
-        <p>
+    <form hx-put="/tournaments/{{.TournamentID}}/tier"
+          hx-confirm="Entrant points will be recalculated. Any unsaved entrant data will be lost. Continue?"
+          hx-target="this" hx-swap="outerHTML">
+        <div>
             <label for="tier">Tier: </label>
             <select name="tier" id="tier">
                 {{range .Tiers}}
@@ -18,7 +19,8 @@
                 {{end}}
             </select>
             <button>Submit</button>
-            <button hx-get="/tournaments/{{.TournamentID}}/tier">Cancel</button>
-        </p>
+            <button hx-get="/tournaments/{{.TournamentID}}/tier" hx-confirm="unset">Cancel</button>
+        </div>
+        <div id="error" style="color: red"></div>
     </form>
 {{end}}
