@@ -1,0 +1,19 @@
+{{- /*
+  Renders a form that allows for a Player's name to be edited.
+
+  Data:
+    .: Player
+*/ -}}
+
+{{define "name"}}
+    <form hx-put="/players/{{.ID}}/name" hx-target="this" hx-swap="outerHTML">
+        <div>
+            <label>
+                Name: <input type="text" name="name" value="{{.Name}}"/>
+            </label>
+            <button>Submit</button>
+            <button hx-get="/players/{{.ID}}/name">Cancel</button>
+        </div>
+        <div id="error" style="color: red"></div>
+    </form>
+{{end}}

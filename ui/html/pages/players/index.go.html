@@ -1,0 +1,37 @@
+{{- /*
+  Renders a text box for adding a new Player, as well as a table displaying all saved players.
+
+  Data:
+    .: []Player
+*/ -}}
+
+{{define "title"}}Players{{end}}
+
+{{define "main"}}
+    <h2>Viewing Players</h2>
+    <form hx-post="/players/new" hx-target="#error" novalidate>
+        <label>
+            Add a player: <input type="text" name="name" placeholder="New player name..."/>
+        </label>
+        <button>Add Player</button>
+    </form>
+    <div id="error" style="color:red" hx-swap="innerHTML"></div>
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {{range .}}
+            <tr>
+                <td><a href="/players/{{.ID}}">{{.Name}}</a></td>
+                <td><a href="/players/{{.ID}}/edit">Edit</a></td>
+                <td><a href="https://htmx.org/examples/delete-row/">Delete</a></td>
+            </tr>
+        {{end}}
+        </tbody>
+    </table>
+{{end}}

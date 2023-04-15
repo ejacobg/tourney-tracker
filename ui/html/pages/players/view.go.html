@@ -1,0 +1,50 @@
+{{- /*
+  Renders player information and attendance.
+
+  Data:
+    .Player:     Player
+    .Attendance: []Attendee
+*/ -}}
+
+{{define "title"}}{{.Player.Name}}{{end}}
+
+{{define "main"}}
+    <h2>{{.Player.Name}}</h2>
+    {{template "name" .Player}}
+    <h3>Tournament History</h3>
+    <table>
+        <thead>
+        <tr>
+            <th>Tournament</th>
+            <th>Tier</th>
+            <th>Entrant Name</th>
+            <th>Placement</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{range .Attendance}}
+            <tr>
+                <td><a href="/tournaments/{{.Tournament.ID}}">{{.Tournament.Name}}</a></td>
+                <td>{{.Tournament.Tier}}</td>
+                <td>{{.Entrant.Name}}</td>
+                <td>{{.Entrant.Placement}}</td>
+            </tr>
+        {{end}}
+        </tbody>
+    </table>
+{{end}}
+
+{{- /*
+  Displays a player name with a button that swaps this element with the name editing form.
+  The endpoint for the edit form is subject to change.
+
+  Data:
+    .: Player
+*/ -}}
+{{define "name"}}
+    <p hx-target="this" hx-swap="outerHTML">
+        Name: {{.Name}}
+        <button hx-get="/players/{{.ID}}/name/edit">Edit</button>
+    </p>
+    <div id="error" style="color: red"></div>
+{{end}}
