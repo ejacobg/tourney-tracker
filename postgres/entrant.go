@@ -2,7 +2,9 @@ package postgres
 
 import (
 	"database/sql"
+	"errors"
 	tournament "github.com/ejacobg/tourney-tracker"
+	"golang.org/x/exp/slices"
 )
 
 // EntrantService represents a service for managing entrants.
@@ -40,6 +42,46 @@ WHERE tournament_id = $1`
 	}
 
 	return entrants, rows.Err()
+}
+
+func (es EntrantService) GetEntrantWithPoints(id int64) (entrant tournament.Entrant, points int, err error) {
+	// Get Entrant and Tournament.
+	tx, err := es.DB.Begin()
+	if err != nil {
+		return
+	}
+	defer tx.Rollback()
+
+	entrant, err = getEntrant(tx, id)
+	if err != nil {
+		return
+	}
+
+	tourney, err := getTournament(tx, entrant.TournamentID)
+	if err != nil {
+		return
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		return
+	}
+
+	// Calculate points.
+	PV := slices.Index(tourney.Placements, entrant.Placement)
+	if PV == -1 {
+		panic("could not find entrant placement")
+	}
+
+	points = tournament.UP*PV + tournament.ATT
+	if entrant.Placement == 1 {
+		points += tournament.FIRST
+	} else if entrant.Placement == 2 && tourney.BracketReset {
+		points += tournament.BR
+	}
+	points *= tourney.Tier.Multiplier
+
+	return
 }
 
 func (es EntrantService) GetAttendance(playerID int64) (attendance []tournament.Attendee, err error) {
@@ -128,4 +170,30 @@ RETURNING id;`
 	}
 
 	return nil
+}
+
+func getEntrant(tx *sql.Tx, id int64) (entrant tournament.Entrant, err error) {
+	if id < 1 {
+		return entrant, ErrRecordNotFound
+	}
+
+	query := `
+SELECT entrants.id, entrants.name, placement, tournament_id, players.name
+FROM entrants
+         LEFT OUTER JOIN players ON entrants.player_id = players.id
+WHERE entrants.id = $1`
+
+	err = tx.QueryRow(query, id).Scan(
+		&entrant.ID,
+		&entrant.Name,
+		&entrant.Placement,
+		&entrant.TournamentID,
+		&entrant.PlayerName,
+	)
+
+	if err != nil && errors.Is(err, sql.ErrNoRows) {
+		err = ErrRecordNotFound
+	}
+
+	return
 }

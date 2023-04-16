@@ -1,0 +1,28 @@
+{{- /*
+  Renders a table row that allows for an Entrant's Player to be selected.
+
+  Data:
+    .Entrant: Entrant
+    .Points:  int
+        The number of points earned by the player for this Tournament.
+    .Players: []Player
+*/ -}}
+
+{{define "player"}}
+    <tr>
+        <td>{{.Entrant.Name}}</td>
+        <td>
+            <select name="player">
+                {{range .Players}}
+                    <option value="{{.ID}}">{{.Name}}</option>
+                {{end}}
+            </select>
+        </td>
+        <td>{{.Points}}</td>
+        <td>{{.Entrant.Placement}}</td>
+        <td>
+            <button hx-put="/entrants/{{.Entrant.ID}}/player">Save</button>
+            <button hx-get="/entrants/{{.Entrant.ID}}/player">Cancel</button>
+        </td>
+    </tr>
+{{end}}

@@ -40,8 +40,9 @@ func NewServer(challongeUsername, challongePassword, startggKey string) *Server 
 
 	srv.router.Handler("GET", "/static/*filepath", http.FileServer(http.Dir("ui")))
 
-	srv.registerTournamentRoutes()
+	srv.registerEntrantRoutes()
 	srv.registerPlayerRoutes()
+	srv.registerTournamentRoutes()
 
 	return &srv
 }

@@ -40,7 +40,7 @@
                 <td>{{index $.Points .Placement}}</td>
                 <td>{{.Placement}}</td>
                 <td>
-                    <button>Edit</button>
+                    <button hx-get="/entrants/{{.ID}}/player/edit" hx-target="closest tr" hx-swap="outerHTML">Edit</button>
                 </td>
             </tr>
         {{end}}

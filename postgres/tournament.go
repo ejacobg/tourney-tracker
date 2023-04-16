@@ -149,3 +149,31 @@ FROM tourney
 	return tx.QueryRow(query, tourney.Name, tourney.URL, tourney.BracketReset, pq.Array(tourney.Placements)).
 		Scan(&tourney.ID, &tourney.Tier.ID, &tourney.Tier.Name, &tourney.Tier.Multiplier)
 }
+
+func getTournament(tx *sql.Tx, id int64) (tourney tournament.Tournament, err error) {
+	if id < 1 {
+		return tourney, ErrRecordNotFound
+	}
+
+	query := `
+SELECT tournaments.id, tournaments.name, url, bracket_reset, placements, tier_id, tiers.name, tiers.multiplier
+FROM tournaments INNER JOIN tiers ON tier_id = tiers.id
+WHERE tournaments.id = $1;`
+
+	err = tx.QueryRow(query, id).Scan(
+		&tourney.ID,
+		&tourney.Name,
+		&tourney.URL,
+		&tourney.BracketReset,
+		pq.Array(&tourney.Placements),
+		&tourney.Tier.ID,
+		&tourney.Tier.Name,
+		&tourney.Tier.Multiplier,
+	)
+
+	if err != nil && errors.Is(err, sql.ErrNoRows) {
+		err = ErrRecordNotFound
+	}
+
+	return
+}

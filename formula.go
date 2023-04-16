@@ -5,10 +5,10 @@ const (
 	// UP is the points given for each unique placement.
 	UP = 5
 
-	// ATT is the points given for showing up to a http.
+	// ATT is the points given for showing up to a tournament.
 	ATT = 10
 
-	// FIRST is the points given for winning a http.
+	// FIRST is the points given for winning a tournament.
 	FIRST = 10
 
 	// BR is the points given to the second-place finisher if they made a bracket reset.

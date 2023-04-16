@@ -16,6 +16,9 @@ type EntrantService interface {
 	// GetEntrants returns all entrants for a given Tournament.
 	GetEntrants(tournamentID int64) ([]Entrant, error)
 
+	// GetEntrantWithPoints returns a single Entrant by ID, as well as the points earned by that Entrant.
+	GetEntrantWithPoints(id int64) (Entrant, int, error)
+
 	// GetAttendance returns all attendance records for a given Player.
 	GetAttendance(playerID int64) ([]Attendee, error)
 
