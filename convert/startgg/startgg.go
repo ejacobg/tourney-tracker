@@ -20,8 +20,8 @@ import (
 
 // This query only supports up to 500 entrants. I currently do not have plans to support more than 500 entrants.
 const query = `
-query TournamentEventQuery(tournament: String, $event: String) {
-    tournament(slug: tournament) {
+query TournamentEventQuery($tournament: String, $event: String) {
+    tournament(slug: $tournament) {
         name
     }
     event(slug: $event) {
@@ -85,7 +85,7 @@ type set struct {
 func (r *response) tournament() tournament.Tournament {
 	return tournament.Tournament{
 		Name:         r.Data.Tournament.Name + " - " + r.Data.Event.Name,
-		URL:          "https://start.gg/" + r.Data.Event.Slug,
+		URL:          "https://www.start.gg/" + r.Data.Event.Slug,
 		BracketReset: applyResetPoints(r.Data.Event.Sets.Nodes),
 		Placements:   uniquePlacements(r.Data.Event.Entrants.Nodes),
 	}
@@ -146,7 +146,7 @@ func uniquePlacements(entrants []entrant) []int64 {
 // An event URL takes this form: https://start.gg/tournament/<tournament-slug>/event/<event-slug> (eg. https://start.gg/tournament/shinto-series-smash-1/event/singles-1v1)
 func FromURL(URL *url.URL, key string) (tourney tournament.Tournament, entrants []tournament.Entrant, err error) {
 	// Only accept start.gg (formerly smash.gg) URLs.
-	if !(URL.Host == "start.gg" || URL.Host == "smash.gg") {
+	if !(URL.Host == "www.start.gg" || URL.Host == "www.smash.gg") {
 		return tourney, entrants, convert.ErrUnrecognizedURL
 	}
 
@@ -178,7 +178,7 @@ func parseSlugs(URL *url.URL) (tournamentSlug, eventSlug string, err error) {
 	}
 
 	// An ideal path would look like this: ["", "tournament", <tournament-slug>, "event", <event-slug>]
-	tournamentSlug, eventSlug = path[2], path[4]
+	tournamentSlug, eventSlug = path[2], strings.Join(path[1:], "/")
 	return
 }
 

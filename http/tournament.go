@@ -19,6 +19,7 @@ func (s *Server) registerTournamentRoutes() {
 	s.router.HandlerFunc(http.MethodGet, "/tournaments/:id/tier", s.getTournamentTier)
 	s.router.HandlerFunc(http.MethodGet, "/tournaments/:id/tier/edit", s.getTournamentTierForm)
 	s.router.HandlerFunc(http.MethodPut, "/tournaments/:id/tier", s.putTournamentTier)
+	s.router.HandlerFunc(http.MethodDelete, "/tournaments/:id", s.deleteTournament)
 }
 
 // getTournaments renders a table of all saved tournaments, as well as a form for adding a new Tournament.
@@ -56,7 +57,7 @@ func (s *Server) postTournamentURL(w http.ResponseWriter, r *http.Request) {
 	switch URL.Host {
 	case "challonge.com":
 		tourney, entrants, err = challonge.FromURL(URL, s.challongeUsername, s.challongePassword)
-	case "start.gg", "smash.gg":
+	case "www.start.gg", "www.smash.gg":
 		tourney, entrants, err = startgg.FromURL(URL, s.startggKey)
 	default:
 		err = convert.ErrUnrecognizedURL
@@ -185,4 +186,21 @@ func (s *Server) putTournamentTier(w http.ResponseWriter, r *http.Request) {
 	// Refresh the page.
 	w.Header()["HX-Refresh"] = []string{"true"}
 	w.WriteHeader(http.StatusOK)
+}
+
+// deleteTournament deletes the given Tournament and all of its entrants.
+func (s *Server) deleteTournament(w http.ResponseWriter, r *http.Request) {
+	id, err := readIDParam(r)
+	if err != nil {
+		NotFoundResponse(w, "Invalid tournament ID.")
+		return
+	}
+
+	err = s.TournamentService.DeleteTournament(id)
+	if err != nil {
+		ServerErrorResponse(w, fmt.Sprintf("Failed to delete tournament: %s", err))
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
 }

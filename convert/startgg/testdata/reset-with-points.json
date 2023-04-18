@@ -1,8 +1,7 @@
 {
   "data": {
     "tournament": {
-      "name": "Shinto Series: Smash #1",
-      "url": "https:\/\/www.start.gg\/tournament\/shinto-series-smash-1"
+      "name": "Shinto Series: Smash #1"
     },
     "event": {
       "name": "Singles 1v1",
@@ -817,7 +816,7 @@
         }
       ]
     },
-    "queryComplexity": 262
+    "queryComplexity": 261
   },
   "actionRecords": []
 }
