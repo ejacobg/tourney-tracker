@@ -1,0 +1,19 @@
+{{/*
+  Renders a table row showing the Entrant information, similar to the one in tournaments/view.go.html.
+
+  Data:
+    .Entrant: Entrant
+    .Points:  int
+*/}}
+
+{{define "player"}}
+    <tr>
+        <td>{{.Entrant.Name}}</td>
+        <td>{{.Entrant.PlayerName.String}}</td>
+        <td>{{.Points}}</td>
+        <td>{{.Entrant.Placement}}</td>
+        <td>
+            <button hx-get="/entrants/{{.Entrant.ID}}/player/edit" hx-target="closest tr" hx-swap="outerHTML">Edit</button>
+        </td>
+    </tr>
+{{end}}

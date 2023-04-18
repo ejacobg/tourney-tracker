@@ -13,6 +13,7 @@
         <td>{{.Entrant.Name}}</td>
         <td>
             <select name="player">
+                <option value="">&lt;remove player&gt;</option>
                 {{range .Players}}
                     <option value="{{.ID}}">{{.Name}}</option>
                 {{end}}
@@ -21,7 +22,7 @@
         <td>{{.Points}}</td>
         <td>{{.Entrant.Placement}}</td>
         <td>
-            <button hx-put="/entrants/{{.Entrant.ID}}/player">Save</button>
+            <button hx-put="/entrants/{{.Entrant.ID}}/player" hx-include="closest tr">Save</button>
             <button hx-get="/entrants/{{.Entrant.ID}}/player">Cancel</button>
         </td>
     </tr>

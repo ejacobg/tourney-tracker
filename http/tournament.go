@@ -152,7 +152,7 @@ func (s *Server) getTournamentTierForm(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// putTournamentTier accepts form data consisting of a "tier" field containing the value of the new Tier.
+// putTournamentTier accepts form data consisting of a "tier" field containing the value of the new Tier ID.
 // The new Tier will then be applied to the Tournament, and a refresh of the Tournament page will be returned.
 func (s *Server) putTournamentTier(w http.ResponseWriter, r *http.Request) {
 	// Get Tournament ID.

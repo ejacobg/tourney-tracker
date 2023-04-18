@@ -32,7 +32,7 @@
             <th></th>
         </tr>
         </thead>
-        <tbody>
+        <tbody hx-target="closest tr" hx-swap="outerHTML">
         {{range .Entrants}}
             <tr>
                 <td>{{.Name}}</td>
@@ -40,7 +40,7 @@
                 <td>{{index $.Points .Placement}}</td>
                 <td>{{.Placement}}</td>
                 <td>
-                    <button hx-get="/entrants/{{.ID}}/player/edit" hx-target="closest tr" hx-swap="outerHTML">Edit</button>
+                    <button hx-get="/entrants/{{.ID}}/player/edit">Edit</button>
                 </td>
             </tr>
         {{end}}
