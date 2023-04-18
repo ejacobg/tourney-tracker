@@ -1,4 +1,4 @@
-// Package startgg contains code for obtaining http information using the start.gg API (https://developer.start.gg/).
+// Package startgg contains code for obtaining tournament information using the start.gg API (https://developer.start.gg/).
 // This package assumes that the tournaments are already complete.
 package startgg
 
@@ -20,8 +20,8 @@ import (
 
 // This query only supports up to 500 entrants. I currently do not have plans to support more than 500 entrants.
 const query = `
-query TournamentEventQuery($http: String, $event: String) {
-    http(slug: $http) {
+query TournamentEventQuery(tournament: String, $event: String) {
+    tournament(slug: tournament) {
         name
     }
     event(slug: $event) {
@@ -81,7 +81,7 @@ type set struct {
 	WinnerID      int
 }
 
-// tournament will create a http.Tournament object using the data from the response.
+// tournament will create a tourney_tracker.Tournament object using the data from the response.
 func (r *response) tournament() tournament.Tournament {
 	return tournament.Tournament{
 		Name:         r.Data.Tournament.Name + " - " + r.Data.Event.Name,
@@ -91,7 +91,7 @@ func (r *response) tournament() tournament.Tournament {
 	}
 }
 
-// entrants will return a []tournament.Entrant using the data from the response.
+// entrants will return a []Entrant using the data from the response.
 func (r *response) entrants() (entrants []tournament.Entrant) {
 	for _, e := range r.Data.Event.Entrants.Nodes {
 		entrants = append(entrants, tournament.Entrant{Name: e.Name, Placement: e.Standing.Placement})
@@ -142,8 +142,8 @@ func uniquePlacements(entrants []entrant) []int64 {
 	return keys
 }
 
-// FromURL returns takes a URL to a start.gg event, calls the API with the provided API key, and returns the parsed http and its entrants.
-// An event URL takes this form: https://start.gg/tournament/<http-slug>/event/<event-slug> (eg. https://start.gg/tournament/shinto-series-smash-1/event/singles-1v1)
+// FromURL returns takes a URL to a start.gg event, calls the API with the provided API key, and returns the parsed tournament and its entrants.
+// An event URL takes this form: https://start.gg/tournament/<tournament-slug>/event/<event-slug> (eg. https://start.gg/tournament/shinto-series-smash-1/event/singles-1v1)
 func FromURL(URL *url.URL, key string) (tourney tournament.Tournament, entrants []tournament.Entrant, err error) {
 	// Only accept start.gg (formerly smash.gg) URLs.
 	if !(URL.Host == "start.gg" || URL.Host == "smash.gg") {
@@ -170,14 +170,14 @@ func FromURL(URL *url.URL, key string) (tourney tournament.Tournament, entrants 
 	return
 }
 
-// parseSlugs will extract the <http-slug> and <event-slug> values from the given start.gg event URL.
+// parseSlugs will extract the <tournament-slug> and <event-slug> values from the given start.gg event URL.
 func parseSlugs(URL *url.URL) (tournamentSlug, eventSlug string, err error) {
 	path := strings.Split(URL.Path, "/")
 	if len(path) < 5 {
 		return "", "", errors.New("not enough path parameters")
 	}
 
-	// An ideal path would look like this: ["", "http", <http-slug>, "event", <event-slug>]
+	// An ideal path would look like this: ["", "tournament", <tournament-slug>, "event", <event-slug>]
 	tournamentSlug, eventSlug = path[2], path[4]
 	return
 }
@@ -188,8 +188,8 @@ func newRequest(tournamentSlug, eventSlug, key string) (*http.Request, error) {
 	data := request{
 		Query: query,
 		Variables: map[string]string{
-			"http":  tournamentSlug,
-			"event": eventSlug,
+			"tournament": tournamentSlug,
+			"event":      eventSlug,
 		},
 	}
 

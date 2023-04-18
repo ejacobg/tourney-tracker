@@ -28,7 +28,7 @@ query TournamentEventQuery($tournament: String, $event: String) {
 
 {
   "tournament": "silver-state-smash-x-pirate-hackers-black-lives-matter-charity",
-  "event": "http/silver-state-smash-x-pirate-hackers-black-lives-matter-charity/event/singles-1v1"
+  "event": "tournament/silver-state-smash-x-pirate-hackers-black-lives-matter-charity/event/singles-1v1"
 }
 
 >>! testdata/no-reset.json
@@ -63,7 +63,7 @@ query TournamentEventQuery($tournament: String, $event: String) {
 
 {
   "tournament": "wrangler-rumble-1",
-  "event": "http/wrangler-rumble-1/event/ultimate-singles"
+  "event": "tournament/wrangler-rumble-1/event/ultimate-singles"
 }
 
 >>! testdata/reset-no-points.json
@@ -98,7 +98,7 @@ query TournamentEventQuery($tournament: String, $event: String) {
 
 {
   "tournament": "shinto-series-smash-1",
-  "event": "http/shinto-series-smash-1/event/singles-1v1"
+  "event": "tournament/shinto-series-smash-1/event/singles-1v1"
 }
 
 >>! testdata/reset-with-points.json

@@ -52,7 +52,7 @@ func Test_response(t *testing.T) {
 			}
 			res, err := convert.Get[response](req)
 			if err != nil {
-				t.Error("failed to get http:", err)
+				t.Error("failed to get tournament:", err)
 				return
 			}
 			tourney := res.tournament()

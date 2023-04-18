@@ -1,4 +1,4 @@
-// Package http contains code that deals with Tournament objects, including handlers.
+// Package tourney_tracker contains core types that deal with handling Tournament objects.
 package tourney_tracker
 
 // Tournament holds fields relevant to the point calculation. A tournament is generally considered immutable after creation, except for its Tier.
@@ -12,8 +12,8 @@ type Tournament struct {
 	// BracketReset is true if any bracket reset points should be applied to the second-place entrant.
 	BracketReset bool `json:"bracketReset"`
 
-	// Placements contains the unique placements of a http, in reverse-sorted order.
-	// For example, if the final standings for an 8-man http are [7, 7, 5, 5, 4, 3, 2, 1], then the unique placements are [7, 5, 4, 3, 2, 1].
+	// Placements contains the unique placements of a tournament, in reverse-sorted order.
+	// For example, if the final standings for an 8-man tournament are [7, 7, 5, 5, 4, 3, 2, 1], then the unique placements are [7, 5, 4, 3, 2, 1].
 	Placements []int64 `json:"placements"` // Can't scan into the normal int type, use int64 or sql.NullInt64. (https://stackoverflow.com/questions/47962615/query-for-an-integer-array-from-postresql-always-returns-uint8)
 
 	Tier Tier
