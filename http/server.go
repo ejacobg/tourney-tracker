@@ -39,6 +39,12 @@ func NewServer(challongeUsername, challongePassword, startggKey string) *Server 
 	}
 
 	srv.router.Handler("GET", "/static/*filepath", http.FileServer(http.Dir("ui")))
+	srv.router.NotFound = http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		NotFoundResponse(w, "Page not found.")
+	})
+	srv.router.MethodNotAllowed = http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		MethodNotAllowedResponse(w, "Method not allowed.")
+	})
 
 	srv.registerEntrantRoutes()
 	srv.registerPlayerRoutes()

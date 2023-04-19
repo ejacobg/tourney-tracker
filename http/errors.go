@@ -30,3 +30,7 @@ func UnprocessableEntityResponse(w http.ResponseWriter, error string) {
 func NotFoundResponse(w http.ResponseWriter, error string) {
 	ErrorResponse(w, error, http.StatusNotFound)
 }
+
+func MethodNotAllowedResponse(w http.ResponseWriter, error string) {
+	ErrorResponse(w, error, http.StatusMethodNotAllowed)
+}
