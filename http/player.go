@@ -7,12 +7,24 @@ import (
 )
 
 func (s *Server) registerPlayerRoutes() {
+	s.router.HandlerFunc(http.MethodGet, "/", s.getRankings)
 	s.router.HandlerFunc(http.MethodGet, "/players", s.getPlayers)
 	s.router.HandlerFunc(http.MethodPost, "/players/new", s.postPlayer)
 	s.router.HandlerFunc(http.MethodGet, "/players/:id", s.getPlayer)
 	s.router.HandlerFunc(http.MethodGet, "/players/:id/name", s.getPlayerName)
 	s.router.HandlerFunc(http.MethodGet, "/players/:id/name/edit", s.getPlayerNameForm)
 	s.router.HandlerFunc(http.MethodPut, "/players/:id/name", s.putPlayerName)
+	s.router.HandlerFunc(http.MethodDelete, "/players/:id", s.deletePlayer)
+}
+
+func (s *Server) getRankings(w http.ResponseWriter, r *http.Request) {
+	ranks, err := s.PlayerService.GetRanks()
+	if err != nil {
+		ServerErrorResponse(w, "Failed to get ranks.")
+		return
+	}
+
+	s.Render(w, 200, "index.go.html", "base", ranks)
 }
 
 // getPlayers renders a table of all saved players, as well as a form for adding a new Player.
@@ -137,4 +149,21 @@ func (s *Server) putPlayerName(w http.ResponseWriter, r *http.Request) {
 	// Refresh is needed to update the title and header of the page.
 	w.Header()["HX-Refresh"] = []string{"true"}
 	w.WriteHeader(http.StatusOK)
+}
+
+// deletePlayer deletes the given Player and updates all of its Entrant records.
+func (s *Server) deletePlayer(w http.ResponseWriter, r *http.Request) {
+	id, err := readIDParam(r)
+	if err != nil {
+		NotFoundResponse(w, "Invalid player ID.")
+		return
+	}
+
+	err = s.PlayerService.DeletePlayer(id)
+	if err != nil {
+		ServerErrorResponse(w, fmt.Sprintf("Failed to delete player: %s", err))
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
 }

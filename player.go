@@ -14,6 +14,9 @@ type PlayerService interface {
 	// GetPlayer returns a single Player by ID.
 	GetPlayer(id int64) (Player, error)
 
+	// GetRanks returns an ordered slice of players and their associated points.
+	GetRanks() ([]Rank, error)
+
 	// CreatePlayer adds the given Player to the database.
 	CreatePlayer(player *Player) error
 
@@ -23,4 +26,9 @@ type PlayerService interface {
 	// DeletePlayer deletes the given Player.
 	// Deleting a Player should nullify any entrants pointing to it.
 	DeletePlayer(id int64) error
+}
+
+type Rank struct {
+	Player Player
+	Points int
 }

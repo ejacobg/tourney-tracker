@@ -1,0 +1,28 @@
+{{- /*
+  Renders a table ranking all players.
+
+  Data:
+    .: []Rank
+*/ -}}
+
+{{define "title"}}Ranking{{end}}
+
+{{define "main"}}
+    <h2>Current Standings</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Points</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{range .}}
+            <tr>
+                <td><a href="/players/{{.Player.ID}}">{{.Player.Name}}</a></td>
+                <td>{{.Points}}</td>
+            </tr>
+        {{end}}
+        </tbody>
+    </table>
+{{end}}

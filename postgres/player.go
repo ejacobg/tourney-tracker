@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"errors"
 	tournament "github.com/ejacobg/tourney-tracker"
+	"golang.org/x/exp/maps"
+	"golang.org/x/exp/slices"
 )
 
 // PlayerService represents a service for managing players.
@@ -49,6 +51,76 @@ WHERE id = $1`
 	}
 
 	return
+}
+
+func (ps PlayerService) GetRanks() ([]tournament.Rank, error) {
+	query := `
+SELECT players.id,
+       players.name,
+       entrants.placement,
+       idx(tournaments.placements, entrants.placement),
+       tournaments.bracket_reset,
+       tiers.multiplier
+FROM players
+         LEFT OUTER JOIN entrants on entrants.player_id = players.id
+         LEFT OUTER JOIN tournaments on tournaments.id = entrants.tournament_id
+         LEFT OUTER JOIN tiers on tiers.id = tournaments.tier_id`
+
+	var (
+		placement    sql.NullInt64
+		PV           sql.NullInt64
+		bracketReset sql.NullBool
+		multiplier   sql.NullInt64
+	)
+
+	// Map player IDs to their rank.
+	ranks := make(map[int64]tournament.Rank)
+
+	rows, err := ps.DB.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var rank tournament.Rank
+
+		err = rows.Scan(&rank.Player.ID, &rank.Player.Name, &placement, &PV, &bracketReset, &multiplier)
+		if err != nil {
+			return nil, err
+		}
+
+		// If the placement value isn't valid, then we can't calculate any points.
+		if !placement.Valid {
+			// If we haven't seen this player before, give them 0 points.
+			if _, ok := ranks[rank.Player.ID]; !ok {
+				ranks[rank.Player.ID] = rank
+			}
+			continue
+		}
+
+		// Calculate the points earned.
+		// Note: PostgreSQL uses 1-based indices, so we have to subtract the PV by 1.
+		rank.Points = tournament.UP*int(PV.Int64-1) + tournament.ATT
+		if placement.Int64 == 1 {
+			rank.Points += tournament.FIRST
+		} else if placement.Int64 == 2 && bracketReset.Bool {
+			rank.Points += tournament.BR
+		}
+		rank.Points *= int(multiplier.Int64)
+
+		// Add the calculated points to the appropriate player.
+		rank.Points += ranks[rank.Player.ID].Points
+		ranks[rank.Player.ID] = rank
+	}
+
+	// Sort our ranks in descending order.
+	unsorted := maps.Values(ranks)
+	slices.SortFunc(unsorted, func(a, b tournament.Rank) bool {
+		return a.Points > b.Points
+	})
+
+	return unsorted, nil
 }
 
 func (ps PlayerService) CreatePlayer(player *tournament.Player) error {
