@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// ErrorResponse response with and logs the given error message to the console, alongside the given response code.
+// ErrorResponse responds with and logs the given error message to the console, alongside the given response code.
 // Any error messages will be rendered inside the #error element of the page.
 func ErrorResponse(w http.ResponseWriter, error string, code int) {
 	log.Println(error)

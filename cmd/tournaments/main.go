@@ -61,7 +61,8 @@ func newTemplateCache() (cache map[string]*template.Template, err error) {
 	if err != nil {
 		return nil, err
 	}
-	pages = append(pages, "ui/html/pages/index.go.html") // Manually adding the index page.
+	// Manually adding the index and about pages.
+	pages = append(pages, "ui/html/pages/index.go.html", "ui/html/pages/about.go.html")
 
 	for _, page := range pages {
 		name := strings.TrimPrefix(filepath.ToSlash(page), "ui/html/pages/")

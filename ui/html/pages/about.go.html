@@ -1,0 +1,38 @@
+{{- /*
+  Renders a page explaining the point formula.
+
+  Data:
+
+*/ -}}
+
+{{define "title"}}About{{end}}
+
+{{define "main"}}
+    <h2>Point Formula</h2>
+        <p>There are 6 variables that go into the point formula:</p>
+        <dl>
+            <dt>UP</dt>
+            <dd>These points are awarded for each unique placement. For every round that passes, each remaining player gets these amount of points.</dd>
+            <dd>5 points are awarded for every unique placement.</dd>
+            <dt>ATT</dt>
+            <dd>These points are awarded for showing up to the tournament.</dd>
+            <dd>10 points are awarded for showing up.</dd>
+            <dt>FIRST</dt>
+            <dd>These points are awarded to the winner of a tournament.</dd>
+            <dd>10 points are awarded for winning.</dd>
+            <dt>BR</dt>
+            <dd>These points are awarded to <em>the second place player</em> if and only if they made a bracket reset.</dd>
+            <dd>In other words, they won the first set of Grand Finals, but lost the second set.</dd>
+            <dd>5 points are awarded for making a bracket reset.</dd>
+            <dt>TIER</dt>
+            <dd>More prestigious tournaments are worth more points. These are applied as a multiplier after the all of the above points have been distributed.</dd>
+            <dt>PV</dt>
+            <dd>This value represents how far from last place a player made it in the tournament.</dd>
+            <dd>If a player got last place, their PV is 0. Every placement after that will increase their PV by 1.</dd>
+            <dd>If the standings of an 8-man tournament look like this: 7, 7, 5, 5, 4, 3, 2, 1, then the PV's for each unique placement are as follows: 0, 1, 2, 3, 4, 5 for 7th, 5th, 4th, 3rd, 2nd, and 1st, respectively.</dd>
+        </dl>
+        <p>The final formula looks like this:</p>
+        <blockquote>
+            (UP * PV + ATT + FIRST? + BR?) * TIER
+        </blockquote>
+{{end}}

@@ -48,7 +48,9 @@ func NewServer(challongeUsername, challongePassword, startggKey string) *Server 
 
 	srv.registerEntrantRoutes()
 	srv.registerPlayerRoutes()
+	srv.registerTierRoutes()
 	srv.registerTournamentRoutes()
+	srv.registerFormulaRoutes()
 
 	return &srv
 }

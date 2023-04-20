@@ -1,0 +1,28 @@
+{{- /*
+  Renders a table showing all the tournaments with the given Tier.
+
+  Data:
+    .Tier:  Tier
+    .Names: []Name
+*/ -}}
+
+{{define "title"}}{{.Tier.Name}}-Tier Tournaments{{end}}
+
+{{define "main"}}
+    <h2>{{.Tier.Name}}-Tier Tournaments</h2>
+    <p>Multiplier: {{.Tier.Multiplier}}</p>
+    <table>
+        <thead>
+        <tr>
+            <th>Tournament Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{range .Names}}
+            <tr>
+                <td><a href="/tournaments/{{.ID}}">{{.Name}}</a></td>
+            </tr>
+        {{end}}
+        </tbody>
+    </table>
+{{end}}

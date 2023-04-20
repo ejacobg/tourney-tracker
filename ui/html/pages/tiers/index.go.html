@@ -1,0 +1,28 @@
+{{- /*
+  Renders table displaying all tiers.
+
+  Data:
+    .: []Tier
+*/ -}}
+
+{{define "title"}}Tiers{{end}}
+
+{{define "main"}}
+    <h2>Viewing Tiers</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Multiplier</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{range .}}
+            <tr>
+                <td><a href="/tiers/{{.ID}}">{{.Name}}</a></td>
+                <td>{{.Multiplier}}</td>
+            </tr>
+        {{end}}
+        </tbody>
+    </table>
+{{end}}
