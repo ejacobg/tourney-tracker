@@ -15,6 +15,9 @@
         <hr>
     </header>
     <main>
+        <div id="error" style="color: red" hx-swap="innerHTML">
+            {{- /* The content of any error message will be rendered here. */ -}}
+        </div>
         {{template "main" .}}
     </main>
     <footer>
