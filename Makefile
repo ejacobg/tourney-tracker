@@ -19,6 +19,15 @@ confirm:
 # DEVELOPMENT
 # ==================================================================================== #
 
+## run/tournaments: run the tourney tracker server
+.PHONY: run/tournaments
+run/tournaments:
+	go run ./cmd/tournaments \
+	-dsn=${TOURNEYTRACKER_DB_DSN} \
+	-challonge-user=${CHALLONGE_USER} \
+	-challonge-pass=${CHALLONGE_PASS} \
+	-startgg-key=${STARTGG_KEY}
+
 ## db/psql: connect to the database using psql
 .PHONY: db/psql
 db/psql:
