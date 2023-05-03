@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-// Server provides several HTTP handlers for servicing http-related requests.
+// Server provides several HTTP handlers for servicing tournament-related requests.
 type Server struct {
 	router *httprouter.Router
 
