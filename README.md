@@ -2,7 +2,7 @@
 
 A rewrite of https://github.com/quincinia/pr-tracker using better practices. This program provides a simple user interface for tracking multiple players' performance across a series of tournaments. It includes a simple formula for quantifying how well a player did at a particular tournament, and uses these scores to determine a ranking of all the tracked players.
 
-For further discussion on the development of this program, see its associated blog post.
+For further discussion on the development of this program, see its associated [blog post](https://ejacobg.com/projects/tourney-tracker/).
 
 ## Prerequisites
 
@@ -13,13 +13,15 @@ This program makes use of the [golang-migrate/migrate](https://github.com/golang
 Once your API keys are generated and your database is set up, populate a `.envrc` file in the project root with these fields:
 
 ```shell
-export TOURNEYTRACKER_DB_DSN='...'
+export TOURNEYTRACKER_DB_DSN='postgres://<username>:<password>@localhost/<database>?sslmode=disable'
 export CHALLONGE_USER=...
 export CHALLONGE_PASS=...
 export STARTGG_KEY=...
 ```
 
 ## Usage
+
+Use the `make db/migrations/up` command to create your database tables.
 
 Use the `make run/tournaments` command to run the server using the DSN and credentials you provided above. If you wish to execute a binary, use the `-dsn`, `-challonge-user`, `-challonge-pass`, and `-startgg-key` command-line flags to pass in this data. The server will be hosted at http://localhost:4000.
 
